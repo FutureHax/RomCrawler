@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:settings="http://schemas.android.com/apk/res/com.t3hh4xx0r.romcrawler" >
+
+    <PreferenceCategory
+    android:title="@string/forums_title" >
+     
+            <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft
+            android:key="rootzwiki"
+       		android:title="@string/rootz"
+    		android:summary="@string/rootz_summary"
+    		settings:icon="@drawable/rootz" >
+       			<intent
+            	android:action="android.intent.action.MAIN"
+            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWOEMChooser" />
+			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
+						
+		    <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft
+            android:key="xda"
+    		android:title="@string/xda"
+    		settings:icon="@drawable/xda"
+    		android:enabled="false" >
+       			<intent
+            	android:action="android.intent.action.MAIN"
+            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+            	android:targetClass="com.t3hh4xx0r.romcrawler.XDAActivity" />
+			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
+					
+  		    <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft
+            android:key="favs"
+    		android:title="@string/favs"
+    		settings:icon="@drawable/fav_yes" 
+    		android:enabled="false" >
+       			<intent
+            	android:action="android.intent.action.MAIN"
+            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+            	android:targetClass="com.t3hh4xx0r.romcrawler.activities.FavoritesActivity" />
+			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
+    </PreferenceCategory>
+</PreferenceScreen>

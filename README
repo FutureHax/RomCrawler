@@ -1,0 +1,13 @@
+To add support for your device, fork the project and add your device to src/com/t3hh4xx0r/DeviceType.java
+Its as simple as DEVICE("rootzwiki developer forum url"),
+
+where DEVICE is your device name, pulled from your build.prop in caps.
+
+For example-
+ro.product.device=toro
+becomes 
+TORO
+
+AndroidManifest.xml and res/layout/main.xml have been withheld due to my developer ID from admob being required in them.
+I didnt want to have to remember to remove them each time I pushed an update. IF your interested in compiling 
+this yourself, I will happily supplu you with the extra two files.

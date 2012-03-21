@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+android:background="@drawable/pinstripe"
+android:weightSum="1" >
+
+  <ProgressBar
+       android:id="@+id/progressBar1"
+       style="?android:attr/progressBarStyleLarge"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+       android:layout_centerVertical="true" />
+       
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageSwitcher
+        android:id="@+id/selected"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp" />
+    
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="63dp"
+        android:text="@string/swipe"
+        android:visibility="gone"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/ics"
+        android:textSize="15dp" />
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:weightSum="1" >
+
+<!--       <ImageView -->
+<!--           android:id="@+id/image2" -->
+<!--           android:layout_width="100dip" -->
+<!--           android:layout_height="100dip" -->
+<!--           android:layout_centerVertical="true" -->
+<!--           android:src="@drawable/ic_launcher" -->
+<!--           android:layout_toLeftOf="@+id/image3" /> -->
+
+<!--       <ImageView -->
+<!--           android:id="@+id/image3" -->
+<!--           android:layout_width="120dip" -->
+<!--           android:layout_height="120dip" -->
+<!--           android:layout_alignBottom="@+id/image2" -->
+<!--           android:layout_centerInParent="true" -->
+<!--           android:src="@drawable/ic_launcher" /> -->
+
+<!--       <ImageView -->
+<!--           android:id="@+id/image4" -->
+<!--           android:layout_width="100dip" -->
+<!--           android:layout_height="100dip" -->
+<!--           android:layout_centerVertical="true" -->
+<!--           android:src="@drawable/ic_launcher" -->
+<!--           android:layout_toRightOf="@+id/image3" /> -->
+        <Gallery 
+        android:id="@+id/gallery"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"/>
+    </RelativeLayout>
+</LinearLayout>
+</RelativeLayout>

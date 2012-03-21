@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   	<string-array name="entries_refresh_times">
+		<item>Every Hour</item>
+		<item>Once A Day</item>
+	</string-array>
+
+	<string-array name="oem">
+	    <item>Samsung</item>
+	</string-array>
+
+	<string-array name="oem_values">
+	    <item>http://rootzwiki.com/forum/8-samsung/</item>
+	</string-array>
+		
+	<string-array name="entryvalues_refresh_times">
+		<item>10</item>
+		<item>86400</item>
+	</string-array>
+	 
+</resources>

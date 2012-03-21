@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+    android:title="Select category" >
+
+           <Preference
+            	android:key="rw"
+       			android:title="RootzWiki">
+       			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                       android:value="http://rootzwiki.com/forum/3-rootzwiki/"/>
+               </intent>
+           </Preference>       
+        
+           <Preference
+            	android:key="gen"
+       			android:title="General">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://rootzwiki.com/forum/53-general/"/>
+               </intent>
+           </Preference>       
+       			
+                   
+           <Preference
+            	android:key="htc"
+       			android:title="HTC">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://rootzwiki.com/forum/7-htc/"/>
+               </intent>
+           </Preference>       
+       				        
+        
+           <Preference
+            	android:key="moto"
+       			android:title="Motorola">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                       android:value="http://rootzwiki.com/forum/9-motorola/"/>
+               </intent>
+           </Preference>       
+       				
+       			           
+            <Preference
+            	android:key="sam"
+       			android:title="Samsung">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                       android:value="http://rootzwiki.com/forum/8-samsung/"/>
+               </intent>
+           </Preference>       
+       			
+
+           <Preference
+            	android:key="lg"
+       			android:title="LG">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                       android:value="http://rootzwiki.com/forum/54-lg/"/>
+               </intent>
+           </Preference>       
+       			
+
+           <Preference
+            	android:key="sony"
+       			android:title="Sony">
+       			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                       android:value="http://rootzwiki.com/forum/283-sony/"/>
+               </intent>
+           </Preference>       
+       				           			            			
+
+           <Preference
+            	android:key="tabs"
+       			android:title="Tablets">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceChooser" >
+                   <extra android:name="url"
+                      android:value="http://rootzwiki.com/forum/104-tablets/"/>
+               </intent>
+           </Preference>       
+       				
+       			
+           </PreferenceCategory>
+</PreferenceScreen>

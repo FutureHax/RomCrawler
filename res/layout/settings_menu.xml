@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen
+            xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:title="Settings"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent">
+		
+	 	<PreferenceCategory
+	 	    android:key="updates"
+	 	    android:title="Auto Updates" >
+        	<CheckBoxPreference
+            	android:key="auto_update"
+            	android:title="Automatically poll for updates"
+            	android:summary="Backround process to check for updates to your favorites list."
+            	android:defaultValue="false" />
+        	<ListPreference 
+	    		android:key="refresh_time" 
+	    		android:dialogTitle="Check every..."
+        	    android:title="Check interval" 
+	    		android:summary="Choose how long in between checks"
+            	android:entries="@array/entries_refresh_times" 
+	    		android:entryValues="@array/entryvalues_refresh_times" 
+	    		android:dependency="auto_update" />
+	 	</PreferenceCategory>
+</PreferenceScreen>
