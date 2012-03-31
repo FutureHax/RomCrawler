@@ -50,7 +50,7 @@ public class FavsAdapter extends BaseAdapter {
 	  final ViewHolder holder;
    	  
 	  if (convertView == null) {
-	      FDBAdapter db = new FDBAdapter(ctx);
+	      DBAdapter db = new DBAdapter(ctx);
     	  db.open();
 		  Cursor c = db.getAllFavs();
 		    if (c.getCount()>0) {

@@ -17,8 +17,9 @@ public class Constants {
 	public static String THREADURL = null;
 	public static String THREADTITLE = null;
 	public static String REQUEST = android.os.Build.DEVICE.toUpperCase() + "\n\n";
-	public static boolean ex = false;
+	public static boolean sel = false;
 	public static boolean isReg = false;
 	public static boolean lReg = false;
 	public static boolean isAdFree = false;
+	public static boolean deviceIsSet = false;
 }

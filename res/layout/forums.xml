@@ -5,11 +5,21 @@
 
     <PreferenceCategory
     android:title="@string/forums_title" >
-     
+    
+  		    <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft
+            android:key="device"
+    		android:title="My Device"
+    		settings:icon="@drawable/ic_launcher" 
+    		android:enabled="true" >
+       			<intent
+            	android:action="android.intent.action.MAIN"
+            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+            	android:targetClass="com.t3hh4xx0r.romcrawler.activities.MyDevice" />        
+			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
+       			
             <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft
             android:key="rootzwiki"
        		android:title="@string/rootz"
-    		android:summary="@string/rootz_summary"
     		settings:icon="@drawable/rootz" >
        			<intent
             	android:action="android.intent.action.MAIN"
@@ -38,5 +48,6 @@
             	android:targetPackage="com.t3hh4xx0r.romcrawler"
             	android:targetClass="com.t3hh4xx0r.romcrawler.activities.FavoritesActivity" />
 			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
-    </PreferenceCategory>
+					
+			</PreferenceCategory>
 </PreferenceScreen>

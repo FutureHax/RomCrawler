@@ -60,7 +60,6 @@ public class RWSubForum extends Activity {
     PullToRefreshListView listView;
     Button fb;
     Context ctx;
-    int subCount;
 
     
 	/** Called when the activity is first created. */
@@ -143,7 +142,6 @@ public class RWSubForum extends Activity {
 		protected ArrayList<TitleResults> doInBackground(String... urls) {
 	        TitleResults titleArray =  new TitleResults();
 			StringBuilder whole = new StringBuilder();
-			subCount = 0;
 
 			try {
 				URL url = new URL(urls[0]);
@@ -179,7 +177,6 @@ public class RWSubForum extends Activity {
        				threadArray.add(sub.attr("abs:href"));
        				titleArray.setIsForum(true);
            			results.add(titleArray);
-       				subCount++;
           			String[] bits = sub.attr("abs:href").split("/");
            			ident = bits[bits.length-1];
            			String[] bits2 = ident.split("-");
@@ -192,7 +189,7 @@ public class RWSubForum extends Activity {
        			authorArray.add(author.text());
       		}
       		cleanAuthors();
-       		for (Element thread : threads) {
+      		for (Element thread : threads) {
        			titleArray =  new TitleResults();
 
        			titleArray.setAuthorDate(authorArray.get(0));
@@ -245,17 +242,15 @@ public class RWSubForum extends Activity {
 
     public void cleanAuthors() {
         ArrayList<String> tmpArray = new ArrayList<String>();
+
 		for (int i=0; i<authorArray.size(); i++) {
 	        tmpArray.add(authorArray.get(i));
-				Log.d("SUBS", authorArray.get(i));
-		}
-		for (int i=0;i<subCount; i++) {
-			tmpArray.remove(0);			
 		}
 		authorArray = new ArrayList<String>();
 		for (int i=0; i<tmpArray.size(); i += 2) {
 			authorArray.add(tmpArray.get(i));
 		}
+
     }
     
 	public void makeToast(String message, Context ctx) {

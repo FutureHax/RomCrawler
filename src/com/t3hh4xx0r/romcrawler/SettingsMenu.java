@@ -35,9 +35,9 @@ public class SettingsMenu extends PreferenceActivity implements OnPreferenceChan
    	    mRefreshTime.setOnPreferenceChangeListener(this);
         mUpdates.setChecked(Constants.AUTOMATICALLY_UPDATE);
         
-        //if (!Constants.isReg) {
+        if (!Constants.isReg) {
         	mUpdates.setEnabled(false);
-        //}
+        }
     }
     
 	@Override

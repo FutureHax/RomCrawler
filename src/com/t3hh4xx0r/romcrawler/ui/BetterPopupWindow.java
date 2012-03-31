@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.activities.FavoritesActivity;
-import com.t3hh4xx0r.romcrawler.adapters.FDBAdapter;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +42,9 @@ public class BetterPopupWindow {
 	private final WindowManager windowManager;
 	static ArrayList<String> customUrls;
 	static String u;
+	static String t;
+	static String rw;
+	static String xda;
 
 
 
@@ -219,11 +222,21 @@ public class BetterPopupWindow {
 	
 	public static class DemoPopupWindow extends BetterPopupWindow implements OnClickListener {
 		int pos;
-		public DemoPopupWindow(View anchor, int position, String ul) {
+		public DemoPopupWindow(View anchor, int position, String title, String ul, String r, String x) {
                   super(anchor);
                   pos = position;
                   u = ul;
-        }
+                  t = title;
+                  xda = x;
+                  if (xda == null) {
+                	  xda = new String("");
+                  }
+                  rw = r;
+                  if (rw == null) {
+                	  rw = new String("");
+                  }
+                 
+		}
 
         @Override
         protected void onCreate() {
@@ -233,7 +246,6 @@ public class BetterPopupWindow {
                                   (LayoutInflater) this.anchor.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                   ViewGroup root = (ViewGroup) inflater.inflate(R.layout.popup, null);
-            	  TextView b = (TextView)root.findViewById(R.id.browser_v);
                   
                   for(int i = 0, icount = root.getChildCount() ; i < icount ; i++) {
                           View v = root.getChildAt(i);
@@ -243,6 +255,13 @@ public class BetterPopupWindow {
                               LinearLayout lL = (LinearLayout) v;
                               for(int j = 0, jcount = lL.getChildCount() ; j < jcount ; j++) {
                               	View item = lL.getChildAt(j);
+                              	if(Constants.sel)
+                              		if(item.getId() == R.id.delete) {
+                              			item.setVisibility(View.GONE);
+                              		} else if(item.getId() == R.id.select_v) {
+                              			item.setVisibility(View.VISIBLE);
+                              		}
+                              	
                               	item.setOnClickListener(this);
                               }
                           }
@@ -252,7 +271,7 @@ public class BetterPopupWindow {
         
   		@Override
   		public void onClick(View v) {
-  	            FDBAdapter fdb = new FDBAdapter(this.anchor.getContext());
+  	            DBAdapter fdb = new DBAdapter(this.anchor.getContext());
    
   	            if(v.getId() == R.id.delete) { 
   	            	fdb.open();
@@ -268,10 +287,10 @@ public class BetterPopupWindow {
 	          	    }
 		            Intent i = new Intent(this.anchor.getContext(), FavoritesActivity.class);
 		            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		            this.anchor.getContext().startActivity(i);
-		            this.dismiss();
 		  	        c.close();
 		  	        fdb.close();
+		  	        this.anchor.getContext().startActivity(i);
+		            this.dismiss();
 	              }
   	            
 	              if (v.getId() == R.id.browser_v) {
@@ -279,6 +298,15 @@ public class BetterPopupWindow {
 	  	            v.getContext().startActivity(Intent.createChooser(iW, v.getContext().getResources().getString(R.string.browser_view)));
 		            this.dismiss();
 	              }
+	              
+	              if (v.getId() == R.id.select_v) {	  
+	            	  	Constants.deviceIsSet = true;
+	 	            	fdb.open();
+	 	            	fdb.updateDevice(rw, xda, t);
+			  	        fdb.close();
+			  	        this.dismiss();
+			  	}
+	              
   		}
 	
     }

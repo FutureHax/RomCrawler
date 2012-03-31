@@ -101,7 +101,7 @@ public class TitleAdapter extends BaseAdapter {
 		  }
 	      holder.fb.setOnClickListener(new OnClickListener() {
 	  		public void onClick(View v) {
-	  			FDBAdapter db = new FDBAdapter(ctx);
+	  			DBAdapter db = new DBAdapter(ctx);
 	  			title = holder.itemName.getText().toString();
 	  			author = holder.authorDate.getText().toString();
   		    	if (!type.equals("xda")) {
@@ -119,17 +119,17 @@ public class TitleAdapter extends BaseAdapter {
 		    			holder.fb.setBackgroundResource(R.drawable.fav_no);	
 		    			reFav();
 	  		    } else {
-	  		    	if (!type.equals("xda")) {
+//	  		    	if (!type.equals("xda")) {
 	  		    		if (!author.equals("")) {
-	  		    			db.insertFav(url, title, ident, "rw", author, "");
+	  		    			db.insertFav(url, title, ident, "rw", author, "", "");
 	  		    		} else {
-	  		    			db.insertFav(url, title, ident, "rwsf", author, "");	  		    			
+	  		    			db.insertFav(url, title, ident, "rwsf", author, "", "");	  		    			
 	  		    		}
-	  		    	} else {
-  		    			db.insertFav(url, title, ident, "xda", author, "");	  		    				  		    		
-	  		    	}
-	  		    	
-	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
+//	  		    	} else {
+//  		    			db.insertFav(url, title, ident, "xda", author, "");	  		    				  		    		
+//	  		    	}
+//	  		    	
+//	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
 	  		    }
 	  			c.close();
 	  			db.close();
@@ -160,7 +160,7 @@ public class TitleAdapter extends BaseAdapter {
 	 
 	 void reFav() {
 		 favs.clear();
-	     FDBAdapter db = new FDBAdapter(ctx);
+	     DBAdapter db = new DBAdapter(ctx);
     	 db.open();
 		 Cursor c = db.getAllFavs();
 		   if (c.getCount()>0) {

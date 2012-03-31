@@ -18,10 +18,12 @@ import org.jsoup.select.Elements;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +32,13 @@ import android.widget.ListView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 
 public class ThreadFragment extends ListFragment {
 	  String URL;
+	  String IDENT;
 	  Context ctx;
+	  boolean isFav;
 	  ArrayList<String> linkArray;
 	  String[] urls;
 	  ArrayList<String> URLS;
@@ -43,6 +48,7 @@ public class ThreadFragment extends ListFragment {
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		    ctx = container.getContext();
 		    URL = getArguments().getString("url");
+		    IDENT = getArguments().getString("ident");
 		    if (!URL.startsWith("http://") ) {
 		    	URL = "http://"+URL;
 		    }
@@ -54,10 +60,42 @@ public class ThreadFragment extends ListFragment {
 	    @Override
 	    public void onStart() {
 	        super.onStart();
+	        if (getIsFav()) {
+	        	FetchEditedTask.populate(ctx, URL, IDENT);
+	        } else {
+	        	Log.d("FETCHEDIT", "NO THANKS");
+	        }
 	        new CreateArrayListTask().execute(URL);
 	    }
 	  
-	    @Override
+	    private boolean getIsFav() {
+            final DBAdapter db = new DBAdapter(ctx);
+   	     	db.open();
+   	 	    Cursor c = db.getAllFavs();
+   	 	    if (c.getCount()>0) {
+   	 	    	if (c.getString(c.getColumnIndex("ident")).equals(IDENT)) {
+	    	   	 	    c.close();
+	    	   	 	    db.close();
+	    	   	 	    return true;
+	    	   	}
+   	 	    		try {
+   	 	    			while (c.moveToNext()) {
+   	 	    	 	    	if (c.getString(c.getColumnIndex("ident")).equals(IDENT)) {
+   	 	    	   	 	    c.close();
+   	 	    	   	 	    db.close();
+   	 	    	   	 	    return true;
+   	 	    		    	}
+   	 	    		    }
+   	 	    		} catch (Exception ep) {
+   	 	    			ep.printStackTrace();
+   	 	    		}
+   	 	    }
+   	 	    c.close();
+   	 		db.close();
+   	 		return false;
+		}
+
+		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {
 	    	super.onListItemClick(l, v, position, id);
 	        String linkURL = linkArray.get(position);
@@ -119,7 +157,7 @@ public class ThreadFragment extends ListFragment {
 	 						}
 	 					}
 	 					Document doc = Jsoup.connect(url.toString()).get();
-	    				Elements links = doc.select("a[href]");
+	 			       	Elements links = doc.select("a[href]");
 	     				for (Element link : links) {
 	     					for (Iterator<String> c = linkArray.iterator(); c.hasNext();) {
 	     						String newName = c.next();

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
+import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
 
 public class RWSubAdapter extends BaseAdapter {
@@ -86,7 +87,7 @@ public class RWSubAdapter extends BaseAdapter {
 			  }
 	      holder.fb.setOnClickListener(new OnClickListener() {
 	  		public void onClick(View v) {
-	  			FDBAdapter db = new FDBAdapter(ctx);
+	  			DBAdapter db = new DBAdapter(ctx);
 	  			title = holder.itemName.getText().toString();
 	  			author = holder.authorDate.getText().toString();
   		  	  	url = RWSubForum.threadArray.get(position);
@@ -99,7 +100,7 @@ public class RWSubAdapter extends BaseAdapter {
 		    		holder.fb.setBackgroundResource(R.drawable.fav_no);	
 		    		reFav();
 	  		    } else {
-	  	    		db.insertFav(url, title, ident, msite, author, "thread");	  		    	
+	  	    		db.insertFav(url, title, ident, msite, author, "thread", "");	  		    	
 	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
 	  		    }
 	  			c.close();
@@ -117,7 +118,7 @@ public class RWSubAdapter extends BaseAdapter {
 	 
 	 void reFav() {
 		 favs.clear();
-	     FDBAdapter db = new FDBAdapter(ctx);
+	     DBAdapter db = new DBAdapter(ctx);
     	 db.open();
 		 Cursor c = db.getAllFavs();
 		   if (c.getCount()>0) {

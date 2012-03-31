@@ -27,10 +27,12 @@ import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.activities.MainActivity;
 import com.t3hh4xx0r.romcrawler.adapters.TitleAdapter;
 import com.t3hh4xx0r.romcrawler.adapters.TitleResults;
+import com.t3hh4xx0r.romcrawler.ui.BetterPopupWindow;
 
 import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
@@ -80,8 +82,13 @@ public class RWDeviceChooser extends Activity {
       		Object o = listView.getItemAtPosition(position);
             TitleResults fullObject = (TitleResults)o;
             String URL = fullObject.getUrl();
-            Intent iW = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
-    		startActivity(Intent.createChooser(iW, getResources().getString(R.string.browser_view)));
+            String TITLE = fullObject.getItemName();
+        	Constants.sel = true;
+        	vibe.vibrate(50);
+        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, TITLE, URL, URL, null);
+			dw.showLikeQuickAction(0, 30);
+    		
+
         	return false;	
         	}
         });

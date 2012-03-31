@@ -85,7 +85,7 @@ public class RWGeneralAdapter extends BaseAdapter {
 			  }
 	      holder.fb.setOnClickListener(new OnClickListener() {
 	  		public void onClick(View v) {
-	  			FDBAdapter db = new FDBAdapter(ctx);
+	  			DBAdapter db = new DBAdapter(ctx);
 	  			title = holder.itemName.getText().toString();
 	  			author = holder.authorDate.getText().toString();
   		  	  	url = RWDeviceGeneral.threadArray.get(position);
@@ -99,7 +99,7 @@ public class RWGeneralAdapter extends BaseAdapter {
 		    		holder.fb.setBackgroundResource(R.drawable.fav_no);	
 		    		reFav();
 	  		    } else {
-	  	    		db.insertFav(url, title, ident, msite, author, type);	  		    	
+	  	    		db.insertFav(url, title, ident, msite, author, type, "");	  		    	
 	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
 	  		    }
 	  			c.close();
@@ -117,7 +117,7 @@ public class RWGeneralAdapter extends BaseAdapter {
 	 
 	 void reFav() {
 		 favs.clear();
-	     FDBAdapter db = new FDBAdapter(ctx);
+	     DBAdapter db = new DBAdapter(ctx);
     	 db.open();
 		 Cursor c = db.getAllFavs();
 		   if (c.getCount()>0) {

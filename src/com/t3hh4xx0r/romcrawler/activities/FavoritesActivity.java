@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
-import com.t3hh4xx0r.romcrawler.adapters.FDBAdapter;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 import com.t3hh4xx0r.romcrawler.adapters.FavsAdapter;
 import com.t3hh4xx0r.romcrawler.adapters.TitleResults;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
@@ -87,8 +87,8 @@ public class FavoritesActivity extends ListActivity {
 	            	u = urls.get(position);
 	            }
 	        	vibe.vibrate(50);
-	        	Constants.ex = true;
-	        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, u);
+	        	Constants.sel = false;
+	        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, u, null, null, null);
 				dw.showLikeQuickAction(0, 30);
 				return false;	
 	    	}
@@ -96,7 +96,7 @@ public class FavoritesActivity extends ListActivity {
 	}
 	    
     public  void populate() {
-        final FDBAdapter db = new FDBAdapter(this);
+        final DBAdapter db = new DBAdapter(this);
         	db.open();
     	    Cursor c = db.getAllFavs();
     	    if (c.getCount()>0) {

@@ -25,7 +25,7 @@ import android.view.MenuItem;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
-import com.t3hh4xx0r.romcrawler.adapters.FDBAdapter;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
@@ -33,6 +33,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	ArrayList<String> URLS;
 	ArrayList<String> IDENTS;
 	ArrayList<String> TITLES;
+	ArrayList<String> EDITS;
     BroadcastReceiver receiver;
     String threadTitle = null;
     public static String threadUrl = null;
@@ -41,6 +42,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
     String ident = null;
     boolean isFav = false;
     String author = null;
+    String edited = null;
     int countage;
     boolean f;
 
@@ -57,6 +59,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
         type = extras.getString("type");
         ident = extras.getString("ident");
         author = extras.getString("author");
+        edited = extras.getString("edited");
         URLS = extras.getStringArrayList("urls");
         IDENTS = extras.getStringArrayList("idents");
         TITLES = extras.getStringArrayList("titles");
@@ -78,7 +81,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
         		 threadUrl = URLS.get(position);
         		 ident = IDENTS.get(position);
         		 if (Constants.isReg || Constants.isAdFree) {
-	                 final FDBAdapter db = new FDBAdapter(getBaseContext());
+	                 final DBAdapter db = new DBAdapter(getBaseContext());
 	        	     	db.open();
 	        	 	    Cursor c = db.getAllFavs();
 	        	 	    if (c.getCount()>0) {
@@ -97,11 +100,6 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	        	 	    }
 	        	 	    c.close();
 	        	 		db.close();
-	        	 		if(isFav){
-	        	 			Log.d("ISFAV", "TRUE");
-	        	 		} else {
-	        	 			Log.d("ISFAV", "FALSE");        	 			
-	        	 		}
 	        	 		if (android.os.Build.VERSION.SDK_INT > 10) {
 	        	 			invalidateOptionsMenu();
 	        	 		}
@@ -123,8 +121,6 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-//                    long downloadId = intent.getLongExtra(
-//                            DownloadManager.EXTRA_DOWNLOAD_ID, 0);
                     
         		 	String ns = Context.NOTIFICATION_SERVICE;
         		 	NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(ns);
@@ -171,6 +167,8 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	
 	        Bundle args = new Bundle();
 	        args.putString("url", URLS.get(position));
+	        args.putString("ident", IDENTS.get(position));
+	        args.putBoolean("fav", isFav);
 	        args.putStringArrayList("urls", URLS);
 	        fragment.setArguments(args);
 	
@@ -240,7 +238,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 //		    break;
 	        case R.id.fav_ab:
 	        	threadUrl = new String(threadUrl.replaceAll("http://", ""));
-  	            FDBAdapter fdb = new FDBAdapter(this);
+  	            DBAdapter fdb = new DBAdapter(this);
             	fdb.open();	        	
             	if (isFav) {
 	  	            Cursor c = fdb.getAllUrls();
@@ -259,7 +257,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	  	            item.setIcon(R.drawable.fav_ab_off);
 	  	            isFav = false;
 	  	        } else {
-	  	        	fdb.insertFav(threadUrl, threadTitle, ident, type, author, "thread");
+	  	        	fdb.insertFav(threadUrl, threadTitle, ident, type, author, "thread", edited);
 	  	            item.setIcon(R.drawable.fav_ab);
 	  	            isFav = true;
 	  	        }

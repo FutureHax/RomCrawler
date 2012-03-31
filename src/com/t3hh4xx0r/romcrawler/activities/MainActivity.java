@@ -20,7 +20,7 @@ import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.Manifest;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.SettingsMenu;
-import com.t3hh4xx0r.romcrawler.adapters.FDBAdapter;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 
 
 public class MainActivity extends PreferenceActivity {
@@ -37,7 +37,7 @@ private Preference favs;
     	Constants.isAdFree = adManager.hasValidRegistrationData();
         favs = (Preference) findPreference("favs");
 //        xda = (Preference) findPreference("xda");
-        FDBAdapter fdb = new FDBAdapter(this);
+        DBAdapter fdb = new DBAdapter(this);
         if (!Constants.lReg && Constants.isReg) {
         	Constants.lReg = true;
      		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -61,6 +61,7 @@ private Preference favs;
     		//xda.setEnabled(true);
     		try {
     			fdb.open();
+    			fdb.close();
     		} catch (Exception e) {
     			
     		}
