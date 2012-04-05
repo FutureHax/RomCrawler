@@ -2,11 +2,6 @@ package com.t3hh4xx0r.romcrawler.ui;
 
 import java.util.ArrayList;
 
-import com.t3hh4xx0r.romcrawler.Constants;
-import com.t3hh4xx0r.romcrawler.R;
-import com.t3hh4xx0r.romcrawler.activities.FavoritesActivity;
-import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,14 +14,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
+
+import com.t3hh4xx0r.romcrawler.Constants;
+import com.t3hh4xx0r.romcrawler.R;
+import com.t3hh4xx0r.romcrawler.activities.FavoritesActivity;
+import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 
 /**
  * This class does most of the work of wrapping the {@link PopupWindow} so it's simpler to use.

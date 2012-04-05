@@ -14,7 +14,6 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;

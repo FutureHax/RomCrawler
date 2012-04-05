@@ -168,8 +168,6 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	        Bundle args = new Bundle();
 	        args.putString("url", URLS.get(position));
 	        args.putString("ident", IDENTS.get(position));
-	        args.putBoolean("fav", isFav);
-	        args.putStringArrayList("urls", URLS);
 	        fragment.setArguments(args);
 	
 	        return fragment;

@@ -268,18 +268,21 @@ public class DBAdapter
 	   
 	    public void updateDevice(String rw, String xda, String title) 
 	    {
-	    	try {
-	    		db.delete(DATABASE_TABLE2, KEY_ROWID + 
-	    				"=" + 0, null);
-	    	} catch (Exception e) {
-	    		e.printStackTrace();
-	    	}
-	    	
-	        ContentValues initialValues = new ContentValues();
-	        initialValues.put(KEY_XDA, xda);
-	        initialValues.put(KEY_RW, rw);
-	        initialValues.put(KEY_TITLE, title);
-	        db.insert(DATABASE_TABLE2, null, initialValues);
+			  Log.d("DATABASE", "Updating "+title);
+	
+			if (isDeviceSet()) { 
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(KEY_XDA, xda);
+				initialValues.put(KEY_RW, rw);
+				initialValues.put(KEY_TITLE, title);
+				db.update(DATABASE_TABLE2, initialValues, "_id=1", null);
+			} else {
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(KEY_XDA, xda);
+				initialValues.put(KEY_RW, rw);
+				initialValues.put(KEY_TITLE, title);
+		        db.insert(DATABASE_TABLE2, null, initialValues);				
+			}
 	  	}
 
 		public Cursor getDevice() {
@@ -301,4 +304,17 @@ public class DBAdapter
 			return mCursor;
 		}
 
+		public boolean isDeviceSet() {
+			Cursor cur = db.rawQuery("SELECT COUNT(*) FROM DEVICE", null);
+			if (cur != null) {
+			    cur.moveToFirst();
+			    if (cur.getInt (0) == 0) {
+			    	return false;
+			    } else{
+			    	return true;
+			    }
+			} else {
+				return false;
+			}			
+		}
 }

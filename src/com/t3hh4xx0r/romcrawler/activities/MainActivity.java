@@ -1,9 +1,9 @@
 package com.t3hh4xx0r.romcrawler.activities;
 
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,6 +38,13 @@ private Preference favs;
         favs = (Preference) findPreference("favs");
 //        xda = (Preference) findPreference("xda");
         DBAdapter fdb = new DBAdapter(this);
+        
+        try {
+ 			new SimpleEula(this).show();
+ 		} catch (IOException e1) {
+ 			e1.printStackTrace();
+ 		} 
+        
         if (!Constants.lReg && Constants.isReg) {
         	Constants.lReg = true;
      		AlertDialog.Builder builder = new AlertDialog.Builder(this);

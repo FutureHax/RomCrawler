@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
-import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
 
 public class RWSubAdapter extends BaseAdapter {

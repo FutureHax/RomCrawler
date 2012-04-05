@@ -2,7 +2,6 @@ package eu.erikw;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -412,7 +411,6 @@ public class PullToRefreshListView extends ListView{
 		public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 			hasResetHeader = false;
 			if(onItemClickListener != null){
-				Log.d("ptr", Integer.toString(position));
 				onItemClickListener.onItemClick(adapterView, view, position, id);
 			}
 		}

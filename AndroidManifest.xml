@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.t3hh4xx0r.romcrawler"
-    android:versionCode="9"
-    android:versionName="2.0.2" >
+    android:versionCode="10"
+    android:versionName="2.1" >
 
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -42,6 +42,13 @@
         </activity>             
         <activity android:screenOrientation="portrait"
             android:name=".SettingsMenu"
+            android:label="Settings" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:screenOrientation="portrait"
+            android:name=".DownloadFile"
             android:label="Settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

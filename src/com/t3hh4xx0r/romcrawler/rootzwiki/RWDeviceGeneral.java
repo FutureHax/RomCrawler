@@ -105,13 +105,16 @@ public class RWDeviceGeneral extends Activity {
              Bundle b = new Bundle();
              if (isForum) {
                  intent = new Intent(RWDeviceGeneral.this, RWSubForum.class);
+            	 b.putInt("c", position);
+            	 b.putBoolean("first", true);
              } else {
             	 intent = new Intent(RWDeviceGeneral.this, ListFragmentViewPagerActivity.class);
                  b.putString("type", "rw");
                  b.putStringArrayList("urls", threadArray);
                  b.putStringArrayList("titles", TITLES);
+            	 b.putInt("c", position-subCount);
              }
-        	 b.putInt("c", position);
+        	 b.putInt("s", subCount);
              b.putStringArrayList("idents", identList);
              b.putString("title", threadTitle);
              b.putString("url", URL);
@@ -170,33 +173,37 @@ public class RWDeviceGeneral extends Activity {
 			}
 			Document doc = Parser.parse(whole.toString(), urls[0]);
 			Elements threads = doc.select(".topic_title");
-	       	Elements authors = doc.select("a[hovercard-ref]");
-	       	Elements subs = doc.select("a[title]");
+	       	Elements authors = doc.select("span[class]");
+	       	Elements subs = doc.select(".col_c_forum");
 	       	for (Element sub : subs) {
+	       		subCount++;
        			titleArray =  new TitleResults();
     			String subTitle = sub.text();
-       			if (sub.attr("title").equals("Go to forum")) {
-       				subCount++;
+    			
+   				String shits[] = sub.toString().split(" ", 6);
+   				String shit = shits[shits.length-2];
+   				shit = new String(shit.replace("href=", ""));
+   				shit = new String(shit.replaceAll("\"", "")); 
+   				
        				typeList.add("forum");
        				titleArray.setItemName(subTitle);
-       				titleArray.setUrl(sub.attr("abs:href"));
-       				threadArray.add(sub.attr("abs:href"));
+       				titleArray.setUrl(shit);
        				titleArray.setIsForum(true);
            			results.add(titleArray);
            			
-          			String[] bits = sub.attr("abs:href").split("/");
+          			String[] bits = sub.attr(shit).split("/");
            			ident = bits[bits.length-1];
            			String[] bits2 = ident.split("-");
            			ident = new String(bits2[0]);
            			titleArray.setIdent(ident);
            			identList.add(ident);
-           			TITLES.add(subTitle);
-       			}
+           			      				
 	       	}
       		for (Element author : authors) {
-       			authorArray.add(author.text());
+      			if (author.text().startsWith("Started")) {      				
+      				authorArray.add(author.text());
+      			}
       		}
-      		cleanAuthors();
        		for (Element thread : threads) {
        			titleArray =  new TitleResults();
        			typeList.add("thread");
@@ -245,21 +252,6 @@ public class RWDeviceGeneral extends Activity {
     		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
     				+ 0, pendingIntent);
         }
-    }
-    
-
-    public void cleanAuthors() {
-        ArrayList<String> tmpArray = new ArrayList<String>();
-		for (int i=0; i<authorArray.size(); i++) {
-	        tmpArray.add(authorArray.get(i));
-		}
-		for (int i=0;i<subCount; i++) {
-			tmpArray.remove(0);
-		}
-		authorArray = new ArrayList<String>();
-		for (int i=0; i<tmpArray.size(); i += 2) {
-			authorArray.add(tmpArray.get(i));
-		}
     }
     
 	public void makeToast(String message, Context ctx) {

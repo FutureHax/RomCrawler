@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,6 +50,7 @@ public class RWSubForum extends Activity {
     static ArrayList<String> authorArray;
     static ArrayList<String> titlesArray;
     static ArrayList<String> TITLES;
+    static ArrayList<String> subList;
     public static ArrayList<String> identList;
     String message;
     String url;
@@ -60,6 +60,8 @@ public class RWSubForum extends Activity {
     PullToRefreshListView listView;
     Button fb;
     Context ctx;
+    int subCount;
+    boolean first;
 
     
 	/** Called when the activity is first created. */
@@ -71,7 +73,13 @@ public class RWSubForum extends Activity {
 
         Bundle extras = getIntent().getExtras();
         url = extras.getString("url");
+        try {
+        	first = extras.getBoolean("first");
+        } catch (Exception e) {
+        	first = false;
+        }
         threadArray = new ArrayList<String>();
+        subList = new ArrayList<String>();
         titlesArray = new ArrayList<String>();
         authorArray = new ArrayList<String>();
         identList = new ArrayList<String>();
@@ -92,6 +100,7 @@ public class RWSubForum extends Activity {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) { 
+            	
     		 Object o = listView.getItemAtPosition(position);
              TitleResults fullObject = (TitleResults)o;
              threadTitle = fullObject.getItemName();
@@ -103,15 +112,15 @@ public class RWSubForum extends Activity {
              if (isForum) {
                  intent = new Intent(RWSubForum.this, RWSubForum.class);
                  b.putString("type", "rwsf");
+            	 b.putInt("c", position);
              } else {
             	 intent = new Intent(RWSubForum.this, ListFragmentViewPagerActivity.class);
-            	 b.putInt("c", position);
+            	 b.putInt("c", position-subCount);            		 
             	 b.putString("type", "rw");
                  b.putStringArrayList("urls", threadArray);
                  b.putStringArrayList("titles", TITLES);
                  b.putStringArrayList("idents", identList);
              }
-            
              b.putString("url", fullObject.getUrl());
              b.putString("author", author);
              b.putString("ident", ident);             
@@ -140,9 +149,12 @@ public class RWSubForum extends Activity {
         
 		@Override
 		protected ArrayList<TitleResults> doInBackground(String... urls) {
+			subCount = 0;
 	        TitleResults titleArray =  new TitleResults();
 			StringBuilder whole = new StringBuilder();
-
+	        authorArray = new ArrayList<String>();
+	        subList.clear();
+	        
 			try {
 				URL url = new URL(urls[0]);
 				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -165,33 +177,39 @@ public class RWSubForum extends Activity {
 			}
 			Document doc = Parser.parse(whole.toString(), urls[0]);
 			Elements threads = doc.select(".topic_title");
-	       	Elements authors = doc.select("a[hovercard-ref]");
-	       	Elements subs = doc.select("a[title]");
+	       	Elements authors = doc.select("span[class]");
+	       	Elements subs = doc.select(".col_c_forum");
 	       	for (Element sub : subs) {
-       			titleArray =  new TitleResults();
     			String subTitle = sub.text();
-       			if (sub.attr("title").equals("Go to forum")) {
-           			TITLES.add(subTitle);
-       				titleArray.setItemName(subTitle);
-       				titleArray.setUrl(sub.attr("abs:href"));
-       				threadArray.add(sub.attr("abs:href"));
-       				titleArray.setIsForum(true);
-           			results.add(titleArray);
-          			String[] bits = sub.attr("abs:href").split("/");
-           			ident = bits[bits.length-1];
-           			String[] bits2 = ident.split("-");
-           			ident = new String(bits2[0]);
-           			titleArray.setIdent(ident);
-           			identList.add(ident);
-       			}
+    			if (!subList.contains(subTitle)) {
+	    			subList.add(subTitle);
+		       		subCount++;
+    			}
+	       		titleArray =  new TitleResults();
+	   			String shits[] = sub.toString().split(" ", 6);
+	   			String shit = shits[shits.length-2];
+	   			shit = new String(shit.replace("href=", ""));
+	   			shit = new String(shit.replaceAll("\"", "")); 
+	   				
+	       		titleArray.setItemName(subTitle);
+	       		titleArray.setUrl(shit);
+	       		titleArray.setIsForum(true);
+	          	results.add(titleArray);
+	          			
+	         	String[] bits = sub.attr(shit).split("/");
+	          	ident = bits[bits.length-1];
+	           	String[] bits2 = ident.split("-");
+	           	ident = new String(bits2[0]);
+	           	titleArray.setIdent(ident);
+	           	identList.add(ident);
 	       	}
       		for (Element author : authors) {
-       			authorArray.add(author.text());
+      			if (author.text().startsWith("Started")) {      				
+      				authorArray.add(author.text());
+      			}
       		}
-      		cleanAuthors();
-      		for (Element thread : threads) {
+       		for (Element thread : threads) {
        			titleArray =  new TitleResults();
-
        			titleArray.setAuthorDate(authorArray.get(0));
        			authorArray.remove(0);
        			
@@ -199,13 +217,13 @@ public class RWSubForum extends Activity {
        			threadTitle = thread.text();
        			titleArray.setItemName(threadTitle);
        			titlesArray.add(threadTitle);
+       			TITLES.add(threadTitle);
        			//Thread link
        			String threadStr = new String(thread.attr("abs:href"));
        			String endTag = new String("/page__view__getnewpost");
        			threadStr = new String(threadStr.replace(endTag, ""));
        			titleArray.setUrl(threadStr);
        			threadArray.add(threadStr);
-       			TITLES.add(threadTitle);
        			String[] bits = threadStr.split("/");
        			ident = bits[bits.length-1];
        			String[] bits2 = ident.split("-");
@@ -228,6 +246,7 @@ public class RWSubForum extends Activity {
         		makeToast("no results", RWSubForum.this);
         	}
         	pB.setVisibility(View.GONE); 
+        	listView.setVisibility(View.VISIBLE);
         	listView.setAdapter(new RWSubAdapter(RWSubForum.this, results, "rw"));
             
      		Intent intent = new Intent(ctx, Receiver.class);
@@ -239,24 +258,16 @@ public class RWSubForum extends Activity {
         }
     }
     
-
-    public void cleanAuthors() {
-        ArrayList<String> tmpArray = new ArrayList<String>();
-
-		for (int i=0; i<authorArray.size(); i++) {
-	        tmpArray.add(authorArray.get(i));
-		}
-		authorArray = new ArrayList<String>();
-		for (int i=0; i<tmpArray.size(); i += 2) {
-			authorArray.add(tmpArray.get(i));
-		}
-
-    }
-    
 	public void makeToast(String message, Context ctx) {
 		Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
 	}
 	
+	@Override
+	public void onResume() {
+        listView.setVisibility(View.INVISIBLE);
+    	new CreateArrayListTask().execute(url);
+        super.onResume();
+	}
  
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuinflate = new MenuInflater(this);

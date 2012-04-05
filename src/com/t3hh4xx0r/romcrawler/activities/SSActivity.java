@@ -148,9 +148,6 @@ public class SSActivity extends Activity implements ViewFactory {
         	Drawable i = ImageOperations(getBaseContext(),image[0],image[0]+"-image.jpg");
 			bArray.add(i);
 	       	gallery.setAdapter(new ImageAdapter(getApplication()));
-//	       	//if (bArray.size()>0) {
-//	       		selected.setImageDrawable(i);
-//	       	//}
 	 	}
 	}
     

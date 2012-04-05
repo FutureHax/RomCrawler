@@ -16,16 +16,15 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ProgressBar;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
@@ -43,7 +42,7 @@ public class RWDeviceChooser extends Activity {
     ProgressBar pB;
     String url;
     String title;
-	/** Called when the activity is first created. */
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -78,7 +77,6 @@ public class RWDeviceChooser extends Activity {
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
         	@Override
         	public boolean onItemLongClick(AdapterView<?> a, View v, int position, long id) {
-    		vibe.vibrate(50); // 50 is time in ms
       		Object o = listView.getItemAtPosition(position);
             TitleResults fullObject = (TitleResults)o;
             String URL = fullObject.getUrl();
@@ -125,13 +123,15 @@ public class RWDeviceChooser extends Activity {
        			e.printStackTrace();
 			}
 			Document doc = Parser.parse(whole.toString(), urls[0]);
-			Elements cats = doc.select("a[title]");
-       		for (Element cat : cats) {
-       			titleArray =  new TitleResults();
-       			String catTitle = cat.text();
-       			if (cat.attr("title").equals("Go to forum")) {
-       				titleArray.setItemName(catTitle);
-       				titleArray.setUrl(cat.attr("abs:href"));
+			Elements devices = doc.select("a[title]");
+       		for (Element device : devices) {
+    			titleArray =  new TitleResults();
+       			if (device.attr("abs:href").startsWith("http://rootzwiki.com/forum") &&
+       				(!device.attr("abs:href").equals(urls[0])) && 
+       					!device.text().equals(devices.get(0).text()) &&
+       						!device.text().equals("")) {
+    				titleArray.setItemName(device.text());
+    				titleArray.setUrl(device.attr("abs:href"));
            			results.add(titleArray);
        			}
        		}
@@ -139,9 +139,9 @@ public class RWDeviceChooser extends Activity {
 		}
 			
 		protected void onPreExecute(){
-					results.clear();
-		        	pB.setVisibility(View.VISIBLE);
-				}
+				results.clear();
+				pB.setVisibility(View.VISIBLE);
+		}
 		
         @Override
         protected void onPostExecute(ArrayList<TitleResults> results) {

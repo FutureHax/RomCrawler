@@ -41,8 +41,6 @@ public class ThreadFragment extends ListFragment {
 	  boolean isFav;
 	  ArrayList<String> linkArray;
 	  String[] urls;
-	  ArrayList<String> URLS;
-	  ArrayList<String> TITLES;
 	  
 	   @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,8 +50,6 @@ public class ThreadFragment extends ListFragment {
 		    if (!URL.startsWith("http://") ) {
 		    	URL = "http://"+URL;
 		    }
-		    URLS = getArguments().getStringArrayList("urls");
-		    TITLES = getArguments().getStringArrayList("titles");
 	        return super.onCreateView(inflater, container, savedInstanceState);
 	    }
 	  
@@ -113,15 +109,20 @@ public class ThreadFragment extends ListFragment {
 	        if (linkURL.startsWith("http://")) {	        	
 	        	if (linkURL.contains("goo-inside") || linkURL.contains("goo.me")) {
 	  	            Intent iW = new Intent(Intent.ACTION_VIEW, Uri.parse(linkURL));
-	  	            v.getContext().startActivity(Intent.createChooser(iW, v.getContext().getResources().getString(R.string.browser_view)));
+	  	            startActivity(Intent.createChooser(iW, getResources().getString(R.string.browser_view)));
 	        	} else {
-	        		DownloadManager dManager = (DownloadManager)ctx.getSystemService(Context.DOWNLOAD_SERVICE);
-	        		Uri down = Uri.parse(linkURL);
-	        		DownloadManager.Request req = new DownloadManager.Request(down);
-	        		req.setShowRunningNotification(true);
-	        		req.setVisibleInDownloadsUi(true);
-	        		req.setDestinationUri(Uri.fromFile(f));
-	        		dManager.enqueue(req);
+        	 		if (android.os.Build.VERSION.SDK_INT > 8) {
+		        		DownloadManager dManager = (DownloadManager)ctx.getSystemService(Context.DOWNLOAD_SERVICE);
+		        		Uri down = Uri.parse(linkURL);
+		        		DownloadManager.Request req = new DownloadManager.Request(down);
+		        		req.setShowRunningNotification(true);
+		        		req.setVisibleInDownloadsUi(true);
+		        		req.setDestinationUri(Uri.fromFile(f));
+		        		dManager.enqueue(req);
+        	 		} else {
+	                Intent iW = new Intent(Intent.ACTION_VIEW, Uri.parse(linkURL));
+	        		startActivity(Intent.createChooser(iW, getResources().getString(R.string.browser_view)));      	            
+        		    }
 	        	}
 	        }
 	 		

@@ -1,5 +1,7 @@
 package com.t3hh4xx0r.romcrawler.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,12 +9,14 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
-import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
+import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
 
 public class MyDevice extends PreferenceActivity {
 	Preference rw;
@@ -32,35 +36,51 @@ public class MyDevice extends PreferenceActivity {
                 
     	DBAdapter db = new DBAdapter(this);
    		db.open();
-   		Cursor c = db.getDevice();
-   		if (Constants.deviceIsSet) {
+   		if (db.isDeviceSet()) {
+   			Cursor c = db.getDevice();
    			rwl = c.getString(1);
    			xdal = c.getString(2);
+   			Log.d("RW", rwl);
+   			Log.d("XDA", xdal);
    		
    			if (Constants.isReg) {
-   				xda.setEnabled(true);
-   			} else {
-   				xda.setEnabled(false);
-   			}   		
+   	  			if (!xdal.equals("") && xdal != null) {
+   	   				if (!xdal.startsWith("http://")) {
+   	   					xdal = new String("http://"+url);
+   	   				} 
+   	   				xda.setEnabled(true);
+   	   			}
+   			} 		
     	
-   			if (!xdal.equals("")) {
-   				if (!xdal.startsWith("http://")) {
-   					xdal = new String("http://"+url);
-   				} 
-   			} else {
-   				xda.setEnabled(false);
-   			}
-   			if (!rwl.equals("")) {
+   			if (!rwl.equals("") && rwl != null) {
    				if (!rwl.startsWith("http://")) {
    					rwl = new String("http://"+url);
    				} 
-   			} else {
-   				rw.setEnabled(false);
+   				rw.setEnabled(true);
    			}
+   	        c.close();
    		} else {
-   			//popup
+			LayoutInflater li = LayoutInflater.from(this);
+			View v = li.inflate(R.layout.device_help, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+
+			alertDialogBuilder.setView(v);
+
+			alertDialogBuilder
+				.setTitle("No device currently set!")
+				.setMessage("Long click on a device to set it as \"My Device\"")
+				.setCancelable(false)
+				.setPositiveButton("OK",
+				  new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog,int id) {
+				    	finish();
+				    }
+				  });
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
    		}
-        c.close();
         db.close();
    
     }
@@ -72,7 +92,7 @@ public class MyDevice extends PreferenceActivity {
    		if(preference == xda){    
    	    	b.putString("url", xdal);
         } else if (preference == rw) {
-        	intent = new Intent(MyDevice.this, RWSubForum.class);
+        	intent = new Intent(MyDevice.this, RWDeviceGeneral.class);
         	b.putString("url", rwl);
         }
 
