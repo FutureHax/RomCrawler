@@ -3,10 +3,12 @@ package com.t3hh4xx0r.romcrawler.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ public class MyDevice extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.my_device);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         rw = (Preference) findPreference("rootzwiki");
         xda = (Preference) findPreference("xda");
@@ -43,7 +46,7 @@ public class MyDevice extends PreferenceActivity {
    			Log.d("RW", rwl);
    			Log.d("XDA", xdal);
    		
-   			if (Constants.isReg) {
+   			if (prefs.getBoolean("isReg", false)) {
    	  			if (!xdal.equals("") && xdal != null) {
    	   				if (!xdal.startsWith("http://")) {
    	   					xdal = new String("http://"+url);

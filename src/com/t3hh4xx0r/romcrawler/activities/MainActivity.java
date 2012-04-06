@@ -6,10 +6,12 @@ import java.io.IOException;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,14 +29,19 @@ public class MainActivity extends PreferenceActivity {
 private IAdManager adManager;
 private Preference favs;
 //private Preference xda;
+public static SharedPreferences prefs;
 
 	/** Called when the activity is first created. */
     @Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.forums);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+
     	adManager = AdManagerFactory.createInstance(getApplication());																																																																																																																																											
-    	Constants.isAdFree = adManager.hasValidRegistrationData();
+    	editor.putBoolean("isAdFree", adManager.hasValidRegistrationData());
+    	editor.commit();
         favs = (Preference) findPreference("favs");
 //        xda = (Preference) findPreference("xda");
         DBAdapter fdb = new DBAdapter(this);
@@ -44,10 +51,12 @@ private Preference favs;
  		} catch (IOException e1) {
  			e1.printStackTrace();
  		} 
-        
-        if (!Constants.lReg && Constants.isReg) {
-        	Constants.lReg = true;
-     		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        if (!prefs.getBoolean("lReg", false) && prefs.getBoolean("isReg", false)) {
+            editor.putBoolean("lReg", true);
+            editor.commit();
+            
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
       		builder.setTitle("Thanks for purchasing!");
       		builder.setMessage("Enjoy the premium features.")
       		   .setCancelable(false)
@@ -59,11 +68,11 @@ private Preference favs;
       		AlertDialog alert = builder.create();
       		alert.show();
         }
-        if (!Constants.isReg) {
+        if (!prefs.getBoolean("isReg", false)) {
     	   Intent intent = new Intent("com.t3hh4xx0r.romcrawler.REGISTER");
     	   this.sendBroadcast(intent, Manifest.permission.REGISTER);	
     	}
-    	if (Constants.isReg) {
+    	if (prefs.getBoolean("isReg", false)) {
     		favs.setEnabled(true);
     		//xda.setEnabled(true);
     		try {
@@ -73,7 +82,7 @@ private Preference favs;
     			
     		}
     	} else {
-    		if (!Constants.isAdFree) {																																																																			
+    		if (!prefs.getBoolean("isAdFree", false)) {																																																																			
             	adManager.showAd();		
     		} else {
         		favs.setEnabled(true);
@@ -89,7 +98,7 @@ private Preference favs;
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuinflate = new MenuInflater(this);
 		menuinflate.inflate(R.menu.main_menu, menu);
-		if (Constants.isReg) {
+		if (prefs.getBoolean("isReg", false)) {
 			menu.removeItem(R.id.upgrade);
 		}
 		return true;

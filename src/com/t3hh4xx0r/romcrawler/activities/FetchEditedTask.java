@@ -60,7 +60,6 @@ public class FetchEditedTask {
 				for (Element edit : edits) {		
 					if (isFirst) {
 						isFirst = false;
-				        Log.d("ADDING", edit.text());
 				        db.addEdited(ident, edit.text());
 			        }
 			    }

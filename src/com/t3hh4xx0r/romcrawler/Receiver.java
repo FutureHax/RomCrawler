@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.t3hh4xx0r.romcrawler.activities.FavoritesActivity;
+import com.t3hh4xx0r.romcrawler.activities.FetchEditedTask;
 import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 //FIX ME
 public class Receiver extends BroadcastReceiver {
@@ -54,7 +55,12 @@ public class Receiver extends BroadcastReceiver {
 	        			    if (!URL.startsWith("http://") ) {
 	        			    	URL = "http://"+URL;
 	        			    }
-	
+	        			    
+		        			String[] bits = URL.replace("http://", "").split("/");
+		           			ident = bits[bits.length-1];
+		           			String[] bits2 = ident.split("-");
+		           			ident = new String(bits2[0]);
+		           			
 	        	    		StringBuilder whole = new StringBuilder();
 	    	    			URL url = null;
 							try {
@@ -86,12 +92,10 @@ public class Receiver extends BroadcastReceiver {
 					       		if (isFirst) {
 				           			isFirst = false;
 				           			if (!c.getString(c.getColumnIndex("edited")).equals(edit.text())) {
-				           				if (db.updateUrl(ident, edit.text())) {
-				           					Log.d("RECEIVER", "UPDATE SUCCESS");
-				           				} else {
-				           					Log.d("RECEIVER", "UPDATE FAIL");
+				           				if (!c.getString(c.getColumnIndex("edited")).equals("")) {
+				           					alert(ctx, c.getString(c.getColumnIndex("title")));
 				           				}
-							       	alert(ctx, c.getString(c.getColumnIndex("title")));
+				           				FetchEditedTask.populate(ctx, URL, ident);
 				           			}  
 					       		}
 					       	}
@@ -107,6 +111,11 @@ public class Receiver extends BroadcastReceiver {
         	        			    	URL = "http://"+URL;
         	        			    }
         	
+        		        			String[] bits = URL.replace("http://", "").split("/");
+        		           			ident = bits[bits.length-1];
+        		           			String[] bits2 = ident.split("-");
+        		           			ident = new String(bits2[0]);
+        		           			
         	        	    		StringBuilder whole = new StringBuilder();
         	    	    			URL url = null;
         							try {
@@ -138,12 +147,10 @@ public class Receiver extends BroadcastReceiver {
         					       		if (isFirst) {
         				           			isFirst = false;
         				           			if (!c.getString(c.getColumnIndex("edited")).equals(edit.text())) {
-        				           				if (db.updateUrl(ident, edit.text())) {
-        				           					Log.d("RECEIVER", "UPDATE SUCCESS");
-        				           				} else {
-        				           					Log.d("RECEIVER", "UPDATE FAIL");
+        				           				if (!c.getString(c.getColumnIndex("edited")).equals("")) {
+        				           					alert(ctx, c.getString(c.getColumnIndex("title")));
         				           				}
-        							       	alert(ctx, c.getString(c.getColumnIndex("title")));
+        				           				FetchEditedTask.populate(ctx, URL, ident);
         				           			}  
         					       		}
         					       	}

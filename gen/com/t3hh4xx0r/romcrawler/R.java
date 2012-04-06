@@ -319,19 +319,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_ss=0x7f020009;
         public static final int pinstripe=0x7f02000a;
         public static final int pinstripe_texture=0x7f02000b;
-        public static final int quickbg=0x7f02000c;
-        public static final int refresh=0x7f02000d;
-        public static final int rootz=0x7f02000e;
-        public static final int test=0x7f02000f;
-        public static final int test_frame=0x7f020010;
-        public static final int vpi__tab_indicator=0x7f020011;
-        public static final int vpi__tab_selected_focused_holo=0x7f020012;
-        public static final int vpi__tab_selected_holo=0x7f020013;
-        public static final int vpi__tab_selected_pressed_holo=0x7f020014;
-        public static final int vpi__tab_unselected_focused_holo=0x7f020015;
-        public static final int vpi__tab_unselected_holo=0x7f020016;
-        public static final int vpi__tab_unselected_pressed_holo=0x7f020017;
-        public static final int xda=0x7f020018;
+        public static final int progress_d=0x7f02000c;
+        public static final int quickbg=0x7f02000d;
+        public static final int refresh=0x7f02000e;
+        public static final int rootz=0x7f02000f;
+        public static final int test=0x7f020010;
+        public static final int test_frame=0x7f020011;
+        public static final int vpi__tab_indicator=0x7f020012;
+        public static final int vpi__tab_selected_focused_holo=0x7f020013;
+        public static final int vpi__tab_selected_holo=0x7f020014;
+        public static final int vpi__tab_selected_pressed_holo=0x7f020015;
+        public static final int vpi__tab_unselected_focused_holo=0x7f020016;
+        public static final int vpi__tab_unselected_holo=0x7f020017;
+        public static final int vpi__tab_unselected_pressed_holo=0x7f020018;
+        public static final int xda=0x7f020019;
     }
     public static final class id {
         public static final int authorDate=0x7f090016;

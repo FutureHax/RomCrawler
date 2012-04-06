@@ -3,7 +3,9 @@ package com.t3hh4xx0r.romcrawler.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,6 +53,8 @@ public class RWGeneralAdapter extends BaseAdapter {
 
 	 public View getView(final int position, View convertView, ViewGroup parent) {
 	  final ViewHolder holder;
+	  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+
 
 	  if (convertView == null) {
 		  convertView = mInflater.inflate(R.layout.list_item, null);
@@ -61,11 +65,11 @@ public class RWGeneralAdapter extends BaseAdapter {
 		  holder.itemName.setSelected(true);
 		  holder.fb = (ImageView) convertView.findViewById(R.id.fav_button);
 		  
-	    	if (Constants.isReg) {
+	    	if (prefs.getBoolean("isReg", false)) {
 	    		reFav();
         		holder.fb.setVisibility(View.VISIBLE);
 	    	} else {
-	    		if (Constants.isAdFree) {
+	    		if (prefs.getBoolean("isAdFree", false)) {
 	        		holder.fb.setEnabled(true);
 		    		reFav();
 	    		}
@@ -88,7 +92,7 @@ public class RWGeneralAdapter extends BaseAdapter {
 	  			DBAdapter db = new DBAdapter(ctx);
 	  			title = holder.itemName.getText().toString();
 	  			author = holder.authorDate.getText().toString();
-  		  	  	url = RWDeviceGeneral.threadArray.get(position);
+  		  	  	url = RWDeviceGeneral.entriesArray.get(position);
   		  	  	ident = RWDeviceGeneral.identList.get(position);
   		  	  	String type = RWDeviceGeneral.typeList.get(position);
 	  			url = new String(url.replaceAll("http://", ""));
@@ -99,7 +103,11 @@ public class RWGeneralAdapter extends BaseAdapter {
 		    		holder.fb.setBackgroundResource(R.drawable.fav_no);	
 		    		reFav();
 	  		    } else {
-	  	    		db.insertFav(url, title, ident, msite, author, type, "");	  		    	
+	  		    	if (!type.equals("forum")) {
+	  		    		db.insertFav(url, title, ident, msite, author, type, "");
+	  		    	} else {
+	  		    		db.insertFav(url, title, ident, msite, author, "never", "");
+	  		    	}
 	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
 	  		    }
 	  			c.close();

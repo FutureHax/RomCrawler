@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:padding="5dp">
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
 	<ImageView android:id="@+id/status_icon"
-		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:layout_width="wrap_content" 
+		android:layout_height="fill_parent"
+		android:padding="5dp"
 		android:layout_alignParentLeft="true" />
 
 	<RelativeLayout android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:layout_toRightOf="@id/status_icon">
 
-		<TextView android:id="@+id/status_text" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_alignParentTop="true" />
+		<TextView android:id="@+id/status_text" 
+		    android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:layout_alignParentTop="true"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold"
+	        android:textColor="#33b5e5" />
+		
 		<ProgressBar android:id="@+id/status_progress"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_width="fill_parent" 
+		    android:layout_height="5dp"
 			android:layout_below="@id/status_text"
-			android:progressDrawable="@android:drawable/progress_horizontal"
-			android:indeterminate="false" android:indeterminateOnly="false" />
+			android:paddingTop="10dp"
+    		android:progressDrawable="@drawable/progress_d"
+			android:indeterminate="false" 
+			android:indeterminateOnly="false" />
 
 
 	</RelativeLayout>

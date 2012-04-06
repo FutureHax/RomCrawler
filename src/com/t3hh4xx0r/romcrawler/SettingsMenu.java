@@ -5,10 +5,12 @@ import com.t3hh4xx0r.romcrawler.activities.MainActivity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -26,6 +28,7 @@ public class SettingsMenu extends PreferenceActivity implements OnPreferenceChan
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.settings_menu);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		
 		mUpdates = (CheckBoxPreference) findPreference("auto_update");
@@ -35,7 +38,7 @@ public class SettingsMenu extends PreferenceActivity implements OnPreferenceChan
    	    mRefreshTime.setOnPreferenceChangeListener(this);
         mUpdates.setChecked(Constants.AUTOMATICALLY_UPDATE);
         
-        if (!Constants.isReg) {
+        if (!prefs.getBoolean("isReg", false)) {
         	mUpdates.setEnabled(false);
         }
     }

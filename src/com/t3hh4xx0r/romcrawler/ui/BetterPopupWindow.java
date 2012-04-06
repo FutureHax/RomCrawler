@@ -221,7 +221,7 @@ public class BetterPopupWindow {
 	
 	public static class DemoPopupWindow extends BetterPopupWindow implements OnClickListener {
 		int pos;
-		public DemoPopupWindow(View anchor, int position, String title, String ul, String r, String x) {
+		public DemoPopupWindow(View anchor, int position, String ul, String title, String r, String x) {
                   super(anchor);
                   pos = position;
                   u = ul;
@@ -271,7 +271,8 @@ public class BetterPopupWindow {
   		@Override
   		public void onClick(View v) {
   	            DBAdapter fdb = new DBAdapter(this.anchor.getContext());
-   
+  	            Log.d("URL", u);
+  	            
   	            if(v.getId() == R.id.delete) { 
   	            	fdb.open();
   	  	            Cursor c = fdb.getAllUrls();
@@ -280,8 +281,6 @@ public class BetterPopupWindow {
 	      	        	  int rowId = Integer.parseInt(id);
 	          	          if (c.getString(c.getColumnIndex("url")).contains(u) || (u).contains(c.getString(c.getColumnIndex("url")))) {
 	          	        	  fdb.deleteUrl(rowId);	
-	          	          } else {
-	          	        	  Log.d("FAVS", c.getString(c.getColumnIndex("url"))+ " : " + u);
 	          	          }
 	          	    }
 		            Intent i = new Intent(this.anchor.getContext(), FavoritesActivity.class);

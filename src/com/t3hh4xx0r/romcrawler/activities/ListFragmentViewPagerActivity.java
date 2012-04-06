@@ -10,8 +10,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -45,10 +47,12 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
     String edited = null;
     int countage;
     boolean f;
-
+    SharedPreferences prefs;
+    
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thread_view);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         Bundle extras = getIntent().getExtras();
         try {
@@ -80,7 +84,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
         		 threadTitle = TITLES.get(position);
         		 threadUrl = URLS.get(position);
         		 ident = IDENTS.get(position);
-        		 if (Constants.isReg || Constants.isAdFree) {
+        		 if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
 	                 final DBAdapter db = new DBAdapter(getBaseContext());
 	        	     	db.open();
 	        	 	    Cursor c = db.getAllFavs();
@@ -182,10 +186,10 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
     
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-		if (type.equals("xda") || !Constants.isReg) {
+		if (type.equals("xda") || !prefs.getBoolean("isReg", false)) {
 			menu.removeItem(R.id.ss_view);
 		}
-		if (Constants.isReg || Constants.isAdFree) {
+		if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
 			if (isFav) {
 				menu.getItem(1).setIcon(R.drawable.fav_ab);
 			}
@@ -201,10 +205,10 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
  		if (android.os.Build.VERSION.SDK_INT < 11) {
 			menu.removeItem(R.id.fav_ab); 			
  		}
-		if (type.equals("xda") || !Constants.isReg) {
+		if (type.equals("xda") || !prefs.getBoolean("isReg", false)) {
 			menu.removeItem(R.id.ss_view);
 		}
-		if (Constants.isReg || Constants.isAdFree) {
+		if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
 			if (isFav) {
 				menu.getItem(1).setIcon(R.drawable.fav_ab);
 			}

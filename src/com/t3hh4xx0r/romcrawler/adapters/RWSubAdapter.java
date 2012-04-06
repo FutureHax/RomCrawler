@@ -3,7 +3,9 @@ package com.t3hh4xx0r.romcrawler.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
+import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
 
 public class RWSubAdapter extends BaseAdapter {
@@ -22,7 +25,6 @@ public class RWSubAdapter extends BaseAdapter {
 	String title;
 	String url;
 	String author;
-	String type;
 	String msite;
 	String ident;
 	
@@ -52,6 +54,7 @@ public class RWSubAdapter extends BaseAdapter {
 
 	 public View getView(final int position, View convertView, ViewGroup parent) {
 	  final ViewHolder holder;
+	  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
 	  if (convertView == null) {
 		  convertView = mInflater.inflate(R.layout.list_item, null);
@@ -62,11 +65,11 @@ public class RWSubAdapter extends BaseAdapter {
 		  holder.itemName.setSelected(true);
 		  holder.fb = (ImageView) convertView.findViewById(R.id.fav_button);
 		  
-	    	if (Constants.isReg) {
+	    	if (prefs.getBoolean("isReg", false)) {
 	    		reFav();
         		holder.fb.setVisibility(View.VISIBLE);
 	    	} else {
-	    		if (Constants.isAdFree) {
+	    		if (prefs.getBoolean("isAdFree", false)) {
 	        		holder.fb.setEnabled(true);
 		    		reFav();
 	    		}
@@ -89,7 +92,8 @@ public class RWSubAdapter extends BaseAdapter {
 	  			DBAdapter db = new DBAdapter(ctx);
 	  			title = holder.itemName.getText().toString();
 	  			author = holder.authorDate.getText().toString();
-  		  	  	url = RWSubForum.threadArray.get(position);
+  		  	  	url = RWSubForum.entriesArray.get(position);
+  		  	  	String type = RWSubForum.typeList.get(position);
   		  	  	ident = RWSubForum.identList.get(position);
 	  			url = new String(url.replaceAll("http://", ""));
 	  			db.open();
@@ -99,7 +103,11 @@ public class RWSubAdapter extends BaseAdapter {
 		    		holder.fb.setBackgroundResource(R.drawable.fav_no);	
 		    		reFav();
 	  		    } else {
-	  	    		db.insertFav(url, title, ident, msite, author, "thread", "");	  		    	
+	  		    	if (!type.equals("forum")) {
+	  		    		db.insertFav(url, title, ident, msite, author, type, "");
+	  		    	} else {
+	  		    		db.insertFav(url, title, ident, msite, author, "never", "");
+	  		    	}
 	  			    holder.fb.setBackgroundResource(R.drawable.fav_yes);
 	  		    }
 	  			c.close();

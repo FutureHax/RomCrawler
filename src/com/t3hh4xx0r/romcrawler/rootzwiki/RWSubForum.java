@@ -46,12 +46,14 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 public class RWSubForum extends Activity {
 
+	public static ArrayList<String> entriesArray;
     public static ArrayList<String> threadArray;
     static ArrayList<String> authorArray;
     static ArrayList<String> titlesArray;
     static ArrayList<String> TITLES;
     static ArrayList<String> subList;
     public static ArrayList<String> identList;
+    public static ArrayList<String> typeList;
     String message;
     String url;
     String threadTitle = null;  
@@ -78,12 +80,14 @@ public class RWSubForum extends Activity {
         } catch (Exception e) {
         	first = false;
         }
+        entriesArray = new ArrayList<String>();
         threadArray = new ArrayList<String>();
         subList = new ArrayList<String>();
         titlesArray = new ArrayList<String>();
         authorArray = new ArrayList<String>();
         identList = new ArrayList<String>();
         TITLES = new ArrayList<String>();
+        typeList = new ArrayList<String>();
         listView = (PullToRefreshListView) findViewById(android.R.id.list);
         listView.setOnRefreshListener(new OnRefreshListener() {
 			public void onRefresh() {
@@ -185,18 +189,21 @@ public class RWSubForum extends Activity {
 	    			subList.add(subTitle);
 		       		subCount++;
     			}
+   				typeList.add("forum");
 	       		titleArray =  new TitleResults();
 	   			String shits[] = sub.toString().split(" ", 6);
 	   			String shit = shits[shits.length-2];
 	   			shit = new String(shit.replace("href=", ""));
 	   			shit = new String(shit.replaceAll("\"", "")); 
 	   				
-	       		titleArray.setItemName(subTitle);
+
+       			entriesArray.add(shit);
+       			titleArray.setItemName(subTitle);
 	       		titleArray.setUrl(shit);
 	       		titleArray.setIsForum(true);
 	          	results.add(titleArray);
 	          			
-	         	String[] bits = sub.attr(shit).split("/");
+      			String[] bits = shit.replace("http://", "").split("/");
 	          	ident = bits[bits.length-1];
 	           	String[] bits2 = ident.split("-");
 	           	ident = new String(bits2[0]);
@@ -209,6 +216,7 @@ public class RWSubForum extends Activity {
       			}
       		}
        		for (Element thread : threads) {
+       			typeList.add("thread");
        			titleArray =  new TitleResults();
        			titleArray.setAuthorDate(authorArray.get(0));
        			authorArray.remove(0);
@@ -223,6 +231,7 @@ public class RWSubForum extends Activity {
        			String endTag = new String("/page__view__getnewpost");
        			threadStr = new String(threadStr.replace(endTag, ""));
        			titleArray.setUrl(threadStr);
+       			entriesArray.add(threadStr);
        			threadArray.add(threadStr);
        			String[] bits = threadStr.split("/");
        			ident = bits[bits.length-1];

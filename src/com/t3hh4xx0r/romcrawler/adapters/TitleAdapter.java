@@ -3,7 +3,9 @@ package com.t3hh4xx0r.romcrawler.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,9 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.XDAActivity;
+import com.t3hh4xx0r.romcrawler.activities.MainActivity;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWSubForum;
 
@@ -51,7 +53,7 @@ public class TitleAdapter extends BaseAdapter {
 	 }
 
 	 public View getView(final int position, View convertView, ViewGroup parent) {
-	  final ViewHolder holder;
+	 final ViewHolder holder;
 
 	  if (!type.equals("shit")) {
 
@@ -63,11 +65,11 @@ public class TitleAdapter extends BaseAdapter {
 			  holder.itemName = (TextView) convertView.findViewById(R.id.itemName);
 			  holder.fb = (ImageView) convertView.findViewById(R.id.fav_button);
 			  
-		    	if (Constants.isReg) {
+		    	if (MainActivity.prefs.getBoolean("isReg", false)) {
 		    		reFav();
 	        		holder.fb.setVisibility(View.VISIBLE);
 		    	} else {
-		    		if (Constants.isAdFree) {
+		    		if (MainActivity.prefs.getBoolean("isAdFree", false)) {
 		        		holder.fb.setEnabled(true);
 			    		reFav();
 		    		}

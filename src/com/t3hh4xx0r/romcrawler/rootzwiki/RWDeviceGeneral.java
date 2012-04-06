@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 public class RWDeviceGeneral extends Activity {
 
+    public static ArrayList<String> entriesArray;
     public static ArrayList<String> threadArray;
     static ArrayList<String> authorArray;
     static ArrayList<String> titlesArray;
@@ -70,6 +72,7 @@ public class RWDeviceGeneral extends Activity {
         setContentView(R.layout.main);
         ctx = (RWDeviceGeneral.this);
         threadArray = new ArrayList<String>();
+        entriesArray = new ArrayList<String>();
         titlesArray = new ArrayList<String>();
         TITLES = new ArrayList<String>();
         identList = new ArrayList<String>();
@@ -190,8 +193,9 @@ public class RWDeviceGeneral extends Activity {
        				titleArray.setUrl(shit);
        				titleArray.setIsForum(true);
            			results.add(titleArray);
+           			entriesArray.add(shit);
            			
-          			String[] bits = sub.attr(shit).split("/");
+          			String[] bits = shit.replace("http://", "").split("/");
            			ident = bits[bits.length-1];
            			String[] bits2 = ident.split("-");
            			ident = new String(bits2[0]);
@@ -221,6 +225,7 @@ public class RWDeviceGeneral extends Activity {
        			threadStr = new String(threadStr.replace(endTag, ""));
        			titleArray.setUrl(threadStr);
        			threadArray.add(threadStr);
+       			entriesArray.add(threadStr);
        			String[] bits = threadStr.split("/");
        			ident = bits[bits.length-1];
        			String[] bits2 = ident.split("-");

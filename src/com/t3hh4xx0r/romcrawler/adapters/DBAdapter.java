@@ -231,15 +231,6 @@ public class DBAdapter
         }
         return mCursor;
     }
-    
-    //---updates a title---
-    public boolean updateUrl(String ident, String edited) 
-    {
-        ContentValues args = new ContentValues();
-        args.put(KEY_EDITED, edited);
-        return db.update(DATABASE_TABLE, args, 
-                         KEY_IDENT + "=" + ident, null) > 0;
-    }
 
 	public Cursor byTitle(String[] title) throws SQLException {
 		  Cursor mCursor = db.query(true, DATABASE_TABLE, new String[] {
@@ -257,19 +248,16 @@ public class DBAdapter
         return mCursor;
    }
 	
-	   public boolean addEdited(String ident, String edited) 
+	   public void addEdited(String ident, String edited) 
 	    {
-		   Log.d("DATABASE", "Updating "+ident+" to "+edited);
+		   Log.d("UPDATING", ident +" : "+edited);
 	        ContentValues args = new ContentValues();
 	        args.put(KEY_EDITED, edited);
-	        return db.update(DATABASE_TABLE, args, 
-	                         KEY_IDENT + "=" + ident, null) > 0;
+	        this.db.update(DATABASE_TABLE, args,"ident = ?", new String[] {ident});
 	    }
 	   
 	    public void updateDevice(String rw, String xda, String title) 
-	    {
-			  Log.d("DATABASE", "Updating "+title);
-	
+	    {	
 			if (isDeviceSet()) { 
 				ContentValues initialValues = new ContentValues();
 				initialValues.put(KEY_XDA, xda);

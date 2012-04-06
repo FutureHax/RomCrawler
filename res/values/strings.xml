@@ -22,6 +22,6 @@
     <string name="custom_url_hint3">www.saved-url-three.com</string>
     <string name="settings">Settings</string>
     <string name="favs">Favorites</string>
-    <string name="updates">-Updated app to work with new RootzWiki site update.\n-Added My Device option.\n-Fixed update notifications.\n-Fixed downloading issue on Froyo and below.</string>
+    <string name="updates">-New download service for users on Froyo.\n\n-Fixed update notifications. (No really, I did this time)\n\n-Major licensing overhaul to provide much more consistant behavior.\n\nFixed favorites related FCs introduced in last version.</string>
     
 </resources>
