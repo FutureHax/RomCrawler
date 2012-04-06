@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.t3hh4xx0r.romcrawler.Constants;
+import com.t3hh4xx0r.romcrawler.DownloadFile;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 
@@ -120,9 +121,8 @@ public class ThreadFragment extends ListFragment {
 		        		req.setDestinationUri(Uri.fromFile(f));
 		        		dManager.enqueue(req);
         	 		} else {
-	                Intent iW = new Intent(Intent.ACTION_VIEW, Uri.parse(linkURL));
-	        		startActivity(Intent.createChooser(iW, getResources().getString(R.string.browser_view)));      	            
-        		    }
+        	 			new DownloadFile(linkURL, f.toString(), zipName, ctx);
+        	 		}
 	        	}
 	        }
 	 		
