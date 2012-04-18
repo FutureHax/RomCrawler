@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+    android:title="Select category" >   
+       			                   
+           <Preference
+            	android:key="htc"
+       			android:title="HTC">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=HTC-Android"/>
+               </intent>
+           </Preference>       
+
+           <Preference
+            	android:key="acer"
+       			android:title="Acer">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=Acer-Android"/>
+               </intent>
+           </Preference>       
+           				                    				       			
+           <Preference
+            	android:key="dell"
+       			android:title="Dell">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=Dell"/>
+               </intent>
+           </Preference>    
+           
+           <Preference
+            	android:key="lg"
+       			android:title="LG">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=LG"/>
+               </intent>
+           </Preference>       
+
+           <Preference
+            	android:key="motorola"
+       			android:title="Motorola">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=Motorola"/>
+               </intent>
+           </Preference>       
+
+           <Preference
+            	android:key="samsung"
+       			android:title="Samsung">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=Samsung-Android"/>
+               </intent>
+           </Preference>       
+
+           <Preference
+            	android:key="toshiba"
+       			android:title="Toshiba">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=Toshiba-Android"/>
+               </intent>
+           </Preference>       
+
+           <Preference
+            	android:key="sony"
+       			android:title="Sony Ericsson">
+        			<intent android:action="android.intent.action.MAIN"
+	            	android:targetPackage="com.t3hh4xx0r.romcrawler"
+	            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDADeviceChooser" >
+                   <extra android:name="url"
+                        android:value="http://forum.xda-developers.com/filter.php?cat=sonyericsson-Android"/>
+               </intent>
+           </Preference>       
+           
+	</PreferenceCategory>
+</PreferenceScreen>

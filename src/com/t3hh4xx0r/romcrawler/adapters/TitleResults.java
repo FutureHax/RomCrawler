@@ -5,6 +5,7 @@ public class TitleResults {
 	 private String authorDate = "";
 	 private String url = "";
 	 private String ident = "";
+	 private String summary = "";
 	 private boolean isForum = false;
 	 
 	 public void setIsForum(boolean isForum) {
@@ -32,14 +33,22 @@ public class TitleResults {
 	  return itemName;
 	 }
 
-	 public void setUrl(String url) {
-	  this.url = url;
-	 }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-	 public String getUrl() {
-	  return url;
-	 }
-		 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+	 
 	public void setAuthorDate(String authorDate) {
 	  this.authorDate = authorDate;
 	 }

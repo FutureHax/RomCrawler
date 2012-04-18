@@ -1,4 +1,4 @@
-package com.t3hh4xx0r.romcrawler.rootzwiki;
+package com.t3hh4xx0r.romcrawler.xda;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +8,13 @@ import android.view.MenuItem;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.activities.MainActivity;
 
-
-public class RWOEMChooser extends PreferenceActivity {
+public class XDAOEMChooser extends PreferenceActivity {
 
 	/** Called when the activity is first created. */
     @Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.layout.rw_oem_chooser);
+		addPreferencesFromResource(R.layout.xda_oem_chooser);
     }
     
 	@Override

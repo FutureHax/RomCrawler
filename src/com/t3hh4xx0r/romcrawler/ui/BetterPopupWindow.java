@@ -41,7 +41,6 @@ public class BetterPopupWindow {
 	private final WindowManager windowManager;
 	static ArrayList<String> customUrls;
 	static String u;
-	static String t;
 	static String rw;
 	static String xda;
 
@@ -221,11 +220,10 @@ public class BetterPopupWindow {
 	
 	public static class DemoPopupWindow extends BetterPopupWindow implements OnClickListener {
 		int pos;
-		public DemoPopupWindow(View anchor, int position, String ul, String title, String r, String x) {
+		public DemoPopupWindow(View anchor, int position, String ul, String r, String x) {
                   super(anchor);
                   pos = position;
                   u = ul;
-                  t = title;
                   xda = x;
                   if (xda == null) {
                 	  xda = new String("");
@@ -271,7 +269,6 @@ public class BetterPopupWindow {
   		@Override
   		public void onClick(View v) {
   	            DBAdapter fdb = new DBAdapter(this.anchor.getContext());
-  	            Log.d("URL", u);
   	            
   	            if(v.getId() == R.id.delete) { 
   	            	fdb.open();
@@ -300,7 +297,7 @@ public class BetterPopupWindow {
 	              if (v.getId() == R.id.select_v) {	  
 	            	  	Constants.deviceIsSet = true;
 	 	            	fdb.open();
-	 	            	fdb.updateDevice(rw, xda, t);
+	 	            	fdb.updateDevice(rw, xda);
 			  	        fdb.close();
 			  	        this.dismiss();
 			  	}

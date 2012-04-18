@@ -4,4 +4,6 @@
           android:title="@string/settings" />        
     <item android:id="@+id/upgrade"
           android:title="Upgrade" />
+    <item android:id="@+id/apps"
+          android:title="View more apps" />
 </menu>

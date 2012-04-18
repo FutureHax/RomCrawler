@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/fav_ab"
+          android:icon="@drawable/fav_ab_off"
+          android:title="Add to Favorites"
+          android:showAsAction="ifRoom" />      
     <item android:id="@+id/ss_view"
           android:icon="@drawable/ic_ss"
           android:title="@string/screenshot_view"
           android:showAsAction="ifRoom" />    
-<!--     <item android:id="@+id/restart" -->
-<!--           android:icon="@drawable/refresh" -->
-<!--           android:title="Refresh" -->
-<!--           android:showAsAction="ifRoom" />  -->
-    <item android:id="@+id/fav_ab"
-          android:icon="@drawable/fav_ab_off"
-          android:title="Add to Favorites"
-          android:showAsAction="ifRoom" />         
 </menu>

@@ -19,6 +19,8 @@ import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
 import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 import com.t3hh4xx0r.romcrawler.rootzwiki.RWDeviceGeneral;
+import com.t3hh4xx0r.romcrawler.xda.XDADeviceGeneral;
+import com.t3hh4xx0r.romcrawler.xda.XDADeviceSpecific;
 
 public class MyDevice extends PreferenceActivity {
 	Preference rw;
@@ -43,8 +45,6 @@ public class MyDevice extends PreferenceActivity {
    			Cursor c = db.getDevice();
    			rwl = c.getString(1);
    			xdal = c.getString(2);
-   			Log.d("RW", rwl);
-   			Log.d("XDA", xdal);
    		
    			if (prefs.getBoolean("isReg", false)) {
    	  			if (!xdal.equals("") && xdal != null) {
@@ -93,6 +93,7 @@ public class MyDevice extends PreferenceActivity {
         Bundle b = new Bundle();
 
    		if(preference == xda){    
+        	intent = new Intent(MyDevice.this, XDADeviceGeneral.class);
    	    	b.putString("url", xdal);
         } else if (preference == rw) {
         	intent = new Intent(MyDevice.this, RWDeviceGeneral.class);

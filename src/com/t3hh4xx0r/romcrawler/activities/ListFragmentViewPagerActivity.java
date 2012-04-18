@@ -64,6 +64,9 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
         ident = extras.getString("ident");
         author = extras.getString("author");
         edited = extras.getString("edited");
+        if (edited == null) {
+        	edited = "never";
+        }
         URLS = extras.getStringArrayList("urls");
         IDENTS = extras.getStringArrayList("idents");
         TITLES = extras.getStringArrayList("titles");
@@ -82,6 +85,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
         	 @Override
         	 public void onPageSelected(int position) {
         		 threadTitle = TITLES.get(position);
+        		 Log.d("TITLE", threadTitle);
         		 threadUrl = URLS.get(position);
         		 ident = IDENTS.get(position);
         		 if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
@@ -191,7 +195,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 		}
 		if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
 			if (isFav) {
-				menu.getItem(1).setIcon(R.drawable.fav_ab);
+				menu.getItem(0).setIcon(R.drawable.fav_ab);
 			}
 		} else {
 			menu.removeItem(R.id.fav_ab);
@@ -210,7 +214,7 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 		}
 		if (prefs.getBoolean("isReg", false) || prefs.getBoolean("isAdFree", false)) {
 			if (isFav) {
-				menu.getItem(1).setIcon(R.drawable.fav_ab);
+				menu.getItem(0).setIcon(R.drawable.fav_ab);
 			}
 		} else {
 			menu.removeItem(R.id.fav_ab);
@@ -236,8 +240,6 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	            ssi.putExtras(b);
 	            startActivity(ssi);
 	        break;
-//	        case R.id.restart:
-//		    break;
 	        case R.id.fav_ab:
 	        	threadUrl = new String(threadUrl.replaceAll("http://", ""));
   	            DBAdapter fdb = new DBAdapter(this);
@@ -259,8 +261,10 @@ public class ListFragmentViewPagerActivity extends FragmentActivity {
 	  	            item.setIcon(R.drawable.fav_ab_off);
 	  	            isFav = false;
 	  	        } else {
-	  	        	fdb.insertFav(threadUrl, threadTitle, ident, type, author, "thread", edited);
-	  	            item.setIcon(R.drawable.fav_ab);
+	  	        	try {
+	  	        		fdb.insertFav(threadUrl, threadTitle, ident, type, author, "thread", edited);
+	  	        	} catch (Exception e) {}
+	  	        	item.setIcon(R.drawable.fav_ab);
 	  	            isFav = true;
 	  	        }
   	            fdb.close();

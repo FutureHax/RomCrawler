@@ -25,7 +25,7 @@ public class DBAdapter
     private static final String DATABASE_NAME = "crawler.db";
     private static final String DATABASE_TABLE = "favs";
     private static final String DATABASE_TABLE2 = "device";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_CREATE =
             "create table favs (_id integer primary key autoincrement, "
@@ -33,7 +33,7 @@ public class DBAdapter
  
     private static final String DATABASE_CREATE2 =
             "create table device (_id integer primary key autoincrement, "
-            + "title text not null, rw text not null, xda text not null );";
+            + "rw text not null, xda text not null );";
  
     private final Context context; 
     
@@ -256,19 +256,28 @@ public class DBAdapter
 	        this.db.update(DATABASE_TABLE, args,"ident = ?", new String[] {ident});
 	    }
 	   
-	    public void updateDevice(String rw, String xda, String title) 
-	    {	
+	    public void updateDevice(String rw, String xda) 
+	    {	    	
 			if (isDeviceSet()) { 
-				ContentValues initialValues = new ContentValues();
+		    	if (xda.equals("")) {
+		    		Cursor c = getDevice();
+		   			xda = c.getString(2);
+		   			c.close();
+		   		}
+		    	if (rw.equals("")) {
+		    		Cursor c = getDevice();
+		   			rw = c.getString(1);
+		   			c.close();
+		   		}
+		    	
+		    	ContentValues initialValues = new ContentValues();
 				initialValues.put(KEY_XDA, xda);
 				initialValues.put(KEY_RW, rw);
-				initialValues.put(KEY_TITLE, title);
 				db.update(DATABASE_TABLE2, initialValues, "_id=1", null);
-			} else {
+		    } else {
 				ContentValues initialValues = new ContentValues();
 				initialValues.put(KEY_XDA, xda);
 				initialValues.put(KEY_RW, rw);
-				initialValues.put(KEY_TITLE, title);
 		        db.insert(DATABASE_TABLE2, null, initialValues);				
 			}
 	  	}
@@ -277,8 +286,7 @@ public class DBAdapter
 		   	Cursor mCursor = db.query(DATABASE_TABLE2, new String[] {
 	        		KEY_ROWID, 
 	                KEY_RW,
-	                KEY_XDA,
-	                KEY_TITLE}, 
+	                KEY_XDA}, 
 	                null, 
 	                null, 
 	                null, 

@@ -35,7 +35,7 @@
        			<intent
             	android:action="android.intent.action.MAIN"
             	android:targetPackage="com.t3hh4xx0r.romcrawler"
-            	android:targetClass="com.t3hh4xx0r.romcrawler.XDAActivity" />
+            	android:targetClass="com.t3hh4xx0r.romcrawler.xda.XDAOEMChooser" />
 			</com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft>
 					
   		    <com.t3hh4xx0r.romcrawler.ui.IconPreferenceScreenLeft

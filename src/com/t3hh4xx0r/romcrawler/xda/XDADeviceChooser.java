@@ -1,4 +1,4 @@
-	package com.t3hh4xx0r.romcrawler.rootzwiki;
+	package com.t3hh4xx0r.romcrawler.xda;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -19,11 +19,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.t3hh4xx0r.romcrawler.Constants;
@@ -36,9 +38,9 @@ import com.t3hh4xx0r.romcrawler.ui.BetterPopupWindow;
 import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
-public class RWDeviceChooser extends Activity {
+public class XDADeviceChooser extends Activity {
 	Context ctx;
-    PullToRefreshListView listView;
+    ListView listView;
     ProgressBar pB;
     String url;
     String title;
@@ -47,29 +49,22 @@ public class RWDeviceChooser extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.main);
-        ctx = (RWDeviceChooser.this);
+        ctx = (XDADeviceChooser.this);
         final Vibrator vibe = (Vibrator) getSystemService(VIBRATOR_SERVICE) ;
         Bundle extras = getIntent().getExtras();
         url = extras.getString("url");
         title = extras.getString("title");
         
-        listView = (PullToRefreshListView) findViewById(android.R.id.list);
-        listView.setOnRefreshListener(new OnRefreshListener() {
-			public void onRefresh() {
-		        new CreateArrayListTask().execute(url);
-	            listView.onRefreshComplete();
-			}
-        });      
+        listView = (ListView) findViewById(android.R.id.list);     
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) { 
     		 Object o = listView.getItemAtPosition(position);
              TitleResults fullObject = (TitleResults)o;
              String URL = fullObject.getUrl();
-             Intent intent = new Intent(RWDeviceChooser.this, RWDeviceGeneral.class);
+             Intent intent = new Intent(XDADeviceChooser.this, XDADeviceGeneral.class);
              Bundle b = new Bundle();
              b.putString("url", URL);
-             b.putString("type", "rw");
              intent.putExtras(b);
              startActivity(intent);    	
             }  
@@ -80,10 +75,9 @@ public class RWDeviceChooser extends Activity {
       		Object o = listView.getItemAtPosition(position);
             TitleResults fullObject = (TitleResults)o;
             String URL = fullObject.getUrl();
-            String TITLE = fullObject.getItemName();
         	Constants.sel = true;
         	vibe.vibrate(50);
-        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, URL, URL, null);
+        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, URL, null, URL);
 			dw.showLikeQuickAction(0, 30);
     		
 
@@ -123,17 +117,15 @@ public class RWDeviceChooser extends Activity {
        			e.printStackTrace();
 			}
 			Document doc = Parser.parse(whole.toString(), urls[0]);
-			Elements devices = doc.select("a[title]");
-       		for (Element device : devices) {
-    			titleArray =  new TitleResults();
-       			if (device.attr("abs:href").startsWith("http://rootzwiki.com/forum") &&
-       				(!device.attr("abs:href").equals(urls[0])) && 
-       					!device.text().equals(devices.get(0).text()) &&
-       						!device.text().equals("")) {
+			Elements devices = doc.select(".forumbox-header");
+      		for (Element device : devices) {
+      			if (!device.text().startsWith("Welcome")) {
+        			titleArray =  new TitleResults();
     				titleArray.setItemName(device.text());
-    				titleArray.setUrl(device.attr("abs:href"));
+    				String u = "http://forum.xda-developers.com/forumdisplay.php?f="+device.toString().split("=")[4].split("\"")[0];
+    				titleArray.setUrl(u);
            			results.add(titleArray);
-       			}
+      			}
        		}
  			return results;
 		}
@@ -148,7 +140,7 @@ public class RWDeviceChooser extends Activity {
         	try {
         		pB.setVisibility(View.GONE); 
         	} catch (Exception e) {}
-        	listView.setAdapter(new TitleAdapter(RWDeviceChooser.this, results, "shit"));
+        	listView.setAdapter(new TitleAdapter(XDADeviceChooser.this, results, "shit"));
         }
     }
 

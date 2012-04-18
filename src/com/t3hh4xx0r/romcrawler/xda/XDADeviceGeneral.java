@@ -1,4 +1,4 @@
-	package com.t3hh4xx0r.romcrawler.rootzwiki;
+package com.t3hh4xx0r.romcrawler.xda;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -14,83 +14,95 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.t3hh4xx0r.romcrawler.Constants;
 import com.t3hh4xx0r.romcrawler.R;
+import com.t3hh4xx0r.romcrawler.Receiver;
+import com.t3hh4xx0r.romcrawler.SettingsMenu;
+import com.t3hh4xx0r.romcrawler.activities.ListFragmentViewPagerActivity;
 import com.t3hh4xx0r.romcrawler.activities.MainActivity;
-import com.t3hh4xx0r.romcrawler.adapters.TitleAdapter;
+import com.t3hh4xx0r.romcrawler.adapters.RWGeneralAdapter;
 import com.t3hh4xx0r.romcrawler.adapters.TitleResults;
-import com.t3hh4xx0r.romcrawler.ui.BetterPopupWindow;
+import com.t3hh4xx0r.romcrawler.adapters.XDAGeneralAdapter;
 
 import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
-public class RWDeviceChooser extends Activity {
-	Context ctx;
-    PullToRefreshListView listView;
-    ProgressBar pB;
-    String url;
-    String title;
+public class XDADeviceGeneral extends Activity {
 
+    public static ArrayList<String> threadArray;
+    static ArrayList<String> titlesArray;
+    String message;
+    String url;
+    String threadTitle = null;  
+    ProgressBar pB;
+    ListView listView;
+    Context ctx;
+    int subCount;
+
+    
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.main);
-        ctx = (RWDeviceChooser.this);
-        final Vibrator vibe = (Vibrator) getSystemService(VIBRATOR_SERVICE) ;
+        ctx = (XDADeviceGeneral.this);
+        threadArray = new ArrayList<String>();
+        titlesArray = new ArrayList<String>();
         Bundle extras = getIntent().getExtras();
         url = extras.getString("url");
-        title = extras.getString("title");
         
-        listView = (PullToRefreshListView) findViewById(android.R.id.list);
-        listView.setOnRefreshListener(new OnRefreshListener() {
-			public void onRefresh() {
-		        new CreateArrayListTask().execute(url);
-	            listView.onRefreshComplete();
-			}
-        });      
+        
+        listView = (ListView) findViewById(android.R.id.list);
+        pB = (ProgressBar) findViewById(R.id.progressBar1);
+		
+        final Vibrator vibe = (Vibrator) getSystemService(VIBRATOR_SERVICE) ;
+
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) { 
-    		 Object o = listView.getItemAtPosition(position);
+       		 Object o = listView.getItemAtPosition(position);
              TitleResults fullObject = (TitleResults)o;
              String URL = fullObject.getUrl();
-             Intent intent = new Intent(RWDeviceChooser.this, RWDeviceGeneral.class);
+             Intent intent = new Intent(XDADeviceGeneral.this, XDADeviceSpecific.class);
              Bundle b = new Bundle();
              b.putString("url", URL);
-             b.putString("type", "rw");
              intent.putExtras(b);
-             startActivity(intent);    	
+             startActivity(intent);     	
             }  
            });
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
         	@Override
         	public boolean onItemLongClick(AdapterView<?> a, View v, int position, long id) {
+    		vibe.vibrate(50); // 50 is time in ms
       		Object o = listView.getItemAtPosition(position);
             TitleResults fullObject = (TitleResults)o;
+            threadTitle = fullObject.getItemName();
             String URL = fullObject.getUrl();
-            String TITLE = fullObject.getItemName();
-        	Constants.sel = true;
-        	vibe.vibrate(50);
-        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, URL, URL, null);
-			dw.showLikeQuickAction(0, 30);
-    		
-
+            Intent iW = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+    		startActivity(Intent.createChooser(iW, getResources().getString(R.string.browser_view)));
         	return false;	
         	}
         });
-        pB = (ProgressBar) findViewById(R.id.progressBar1);
         new CreateArrayListTask().execute(url);
     }
     
@@ -101,6 +113,7 @@ public class RWDeviceChooser extends Activity {
 		protected ArrayList<TitleResults> doInBackground(String... urls) {
 	        TitleResults titleArray =  new TitleResults();
 			StringBuilder whole = new StringBuilder();
+	        subCount = 0;
 
 			try {
 				URL url = new URL(urls[0]);
@@ -123,35 +136,60 @@ public class RWDeviceChooser extends Activity {
        			e.printStackTrace();
 			}
 			Document doc = Parser.parse(whole.toString(), urls[0]);
-			Elements devices = doc.select("a[title]");
-       		for (Element device : devices) {
-    			titleArray =  new TitleResults();
-       			if (device.attr("abs:href").startsWith("http://rootzwiki.com/forum") &&
-       				(!device.attr("abs:href").equals(urls[0])) && 
-       					!device.text().equals(devices.get(0).text()) &&
-       						!device.text().equals("")) {
-    				titleArray.setItemName(device.text());
-    				titleArray.setUrl(device.attr("abs:href"));
-           			results.add(titleArray);
-       			}
+			Elements threads = doc.select(".forumtitle");
+       		for (Element thread : threads) {
+       			titleArray =  new TitleResults();
+       			
+       			//Thread title
+       			threadTitle = thread.text();
+       			titleArray.setItemName(threadTitle);
+       			titlesArray.add(threadTitle);
+       			//Thread link
+				String u = "http://forum.xda-developers.com/forumdisplay.php?f="+thread.toString().split("=")[4].split("\"")[0];
+       			titleArray.setUrl(u);
+       			//Summary
+       			String s = thread.toString().split("<p>")[1].replace("</p></h3>", "").replaceAll("amp;", "");
+       			threadArray.add(u);
+       			titleArray.setSummary(s);
+       			results.add(titleArray);
        		}
  			return results;
 		}
 			
 		protected void onPreExecute(){
-				results.clear();
-				pB.setVisibility(View.VISIBLE);
-		}
+					results.clear();
+		        	pB.setVisibility(View.VISIBLE);
+				}
 		
         @Override
         protected void onPostExecute(ArrayList<TitleResults> results) {
-        	try {
-        		pB.setVisibility(View.GONE); 
-        	} catch (Exception e) {}
-        	listView.setAdapter(new TitleAdapter(RWDeviceChooser.this, results, "shit"));
+        	if (results.size() == 0) {
+        		makeToast("no results", XDADeviceGeneral.this);
+        	}
+        	pB.setVisibility(View.GONE); 
+        	listView.setAdapter(new XDAGeneralAdapter(XDADeviceGeneral.this, results, "xda"));
+            
+     		Intent intent = new Intent(ctx, Receiver.class);
+    		PendingIntent pendingIntent = PendingIntent.getBroadcast(
+    				ctx.getApplicationContext(), 234324243, intent, 0);
+    		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+    				+ 0, pendingIntent);
         }
     }
-
+    
+	public void makeToast(String message, Context ctx) {
+		Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+	}
+	
+ 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuinflate = new MenuInflater(this);
+		menuinflate.inflate(R.menu.forum_menu, menu);
+		menu.removeItem(R.id.restart);
+		return true;
+	}	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -159,10 +197,17 @@ public class RWDeviceChooser extends Activity {
 	            Intent intent = new Intent(this, MainActivity.class);
 	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	            startActivity(intent);
-	            return true;
-	        default:
+	        break;
+	        case R.id.settings:
+	            Intent si = new Intent(this, SettingsMenu.class);
+	            si.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(si);
+	        break;
+	    default:
 	            return super.onOptionsItemSelected(item);
 	    }
+		return false;
 	}
-	
+
 }
+

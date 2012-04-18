@@ -89,7 +89,7 @@ public class FavoritesActivity extends ListActivity {
 	            }
 	        	vibe.vibrate(50);
 	        	Constants.sel = false;
-	        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, u, null, null, null);
+	        	BetterPopupWindow dw = new BetterPopupWindow.DemoPopupWindow(v, position, u, null, null);
 				dw.showLikeQuickAction(0, 30);
 				return false;	
 	    	}

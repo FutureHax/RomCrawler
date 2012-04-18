@@ -28,7 +28,7 @@ import com.t3hh4xx0r.romcrawler.adapters.DBAdapter;
 public class MainActivity extends PreferenceActivity {
 private IAdManager adManager;
 private Preference favs;
-//private Preference xda;
+private Preference xda;
 public static SharedPreferences prefs;
 
 	/** Called when the activity is first created. */
@@ -43,7 +43,7 @@ public static SharedPreferences prefs;
     	editor.putBoolean("isAdFree", adManager.hasValidRegistrationData());
     	editor.commit();
         favs = (Preference) findPreference("favs");
-//        xda = (Preference) findPreference("xda");
+        xda = (Preference) findPreference("xda");
         DBAdapter fdb = new DBAdapter(this);
         
         try {
@@ -74,7 +74,7 @@ public static SharedPreferences prefs;
     	}
     	if (prefs.getBoolean("isReg", false)) {
     		favs.setEnabled(true);
-    		//xda.setEnabled(true);
+    		xda.setEnabled(true);
     		try {
     			fdb.open();
     			fdb.close();
@@ -130,6 +130,25 @@ public static SharedPreferences prefs;
           		AlertDialog alert = builder.create();
           		alert.show();
           		break;
+	        case R.id.apps:		           	
+	      		AlertDialog.Builder b = new AlertDialog.Builder(this);
+	      		b.setTitle("View more apps")
+	      		   .setMessage("View more apps from the developer")
+	      		   .setCancelable(true)
+	      		   .setPositiveButton("Lets do it!", new DialogInterface.OnClickListener() {
+	      		       public void onClick(DialogInterface dialog, int id) {
+	      					Intent marketApp = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=r2doesinc&c=apps"));
+	      					marketApp.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+	      		 			try{
+	      						startActivity(marketApp);
+	      					}catch(Exception e){
+	      						e.printStackTrace();
+	      					}        	 
+	      		       }
+	      		   });
+	      		AlertDialog a = b.create();
+	      		a.show();
+	        break;        	        
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
